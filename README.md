@@ -2,8 +2,9 @@
 
 ## To Compile
 
-```
+~~~~
 mkdir build
 cd build
 cmake ..
-cmake --build .```
+cmake --build .
+~~~~
