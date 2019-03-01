@@ -12,7 +12,7 @@ cmake --build .
 ## Usage
 
 ~~~~
-*** Image Steganography by LSB substitution***
+*** Image Steganography by LSB substitution ***
 
 Usage:  
 ./isteg [-e] <text file to encode> <source bitmap> <destination bitmap>

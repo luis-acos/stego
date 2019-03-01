@@ -6,7 +6,7 @@
 
 
 void print_help(char *path){
-    printf("*** Image Steganography by LSB substitution***\n\n"
+    printf("*** Image Steganography by LSB substitution ***\n\n"
            "Usage:  \n"
            "%s [-e] <text file to encode> <source bitmap> <destination bitmap>\n"
            "%s [-d] <encoded bitmap> <decoded file>\n\n"
