@@ -5,6 +5,14 @@
 #include "bitmap.h"
 #include "util.h"
 
+/* Function to read a bitmap struct 
+Opens (image) file and allocates memory to hold bitmap struct.
+Reads the header ? find out why header is important?
+Reads the bitmap struct header variable with the info in the file using an fread
+Allocates the memory for the data variable of the bitmap struct 
+Reads the bitmap struct data variable with the info in the file using an fread
+returns the image bitmap struct 
+*/
 Bitmap *read_bitmap(char *filename, char **error) {
     // open the file for reading as binary
     FILE *file = _open_file(filename, "rb");
@@ -29,6 +37,11 @@ Bitmap *read_bitmap(char *filename, char **error) {
     return image;
 }
 
+/*
+Opens (image file)
+Writes the image bitmap struct field with the file header
+ditto for the data
+*/
 bool write_bitmap(const char *filename, Bitmap *image, char **error) {
     // open the file for writing as binary
     FILE *file = _open_file(filename, "wb");
@@ -43,9 +56,9 @@ bool write_bitmap(const char *filename, Bitmap *image, char **error) {
     //TODO: check that image data was written properly
 
     return true;
-
 }
 
+// no sure but looks like TODO
 bool check_bitmap_header(BitmapHeader header, char *filename) {
     return true;
 }
