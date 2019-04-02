@@ -6,7 +6,6 @@
 #include "bitmap.h"
 #include "util.h"
 
-
 unsigned char _get_bit(char byte, int bit_number) {
     return (unsigned char) ((byte >> bit_number) & 1);
 }
@@ -28,16 +27,31 @@ long _get_length(const unsigned char *data) {
     return length;
 }
 
+/*
+Takes a text, a (char pointer or char array?) original image and a (char pointer or char array?) destination image
+Opens the text source, calls read_bitmap to populate a bitmap struct with the origional image data 
+Takes a single char from source text, splits it into 8 bits, and changes last bit of 8 bytes of image data
+to the 8 bits in the char of the source text.
+Iterates to the next char in the source text until EOF of source file is reached, then writes the image bitmap 
+into the destination image 
+*/
 bool encode(char *text_source, char *original_image, char *destination_image) {
     //TODO: add size of text source to encoded image
+    
+    //unsure error_message use?
     char *error_message = NULL;
     char buff;
     int index = 4;
     unsigned char mask = 1;
     FILE *text_file = _open_file(text_source, "r");
     long text_size = _get_text_length(text_file);
+    
+    //takes the input image and populates a bitmap with its data 
     Bitmap *image = read_bitmap(original_image, &error_message);
     _store_length(text_size, image->data);
+    
+    //conducts some bitwise shift operations to separate single char from text into 8 bits 
+    //and spread it between 8 bytes in the image file, depositing it in the last bit of each image byte  
     do {
         buff = (char) fgetc(text_file);
         for (int i = 0; i < 8; i++) {
@@ -46,11 +60,18 @@ bool encode(char *text_source, char *original_image, char *destination_image) {
         }
     } while (!feof(text_file));
 
+    //writes (bitmap) image to destination image 
     write_bitmap(destination_image, image, &error_message);
     bool is_valid = check_bitmap_header(image->header, "sw_poster_copy.bmp");
     return is_valid;
 }
 
+/*
+Takes an (char array) image source and (char array) destination text
+Populates the image source into a bitmap struct
+Shaves off the last bit in 8 bytes of the image file and populates a char with the bits it shaves off;
+continues into for message length until done
+*/
 bool decode(char *image_source, char *text_destination) {
     char *error_message = NULL;
     unsigned char buff = 0;
@@ -71,5 +92,4 @@ bool decode(char *image_source, char *text_destination) {
     return is_valid;
 }
 
-//TODO: decode
-
+//TODO: decode //Looks like decode is complete?
