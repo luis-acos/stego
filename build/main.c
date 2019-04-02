@@ -3,7 +3,11 @@
 #include <memory.h>
 #include "bitmap.h"
 #include "stego.h"
+#include <pthread.h>
 
+#DEFINE NUM_THREADS 4 
+
+pthread thread_store[NUM_THREADS];
 
 void print_help(char *path){
     printf("*** Image Steganography by LSB substitution ***\n\n"
@@ -33,6 +37,14 @@ int main(int argc, char **argv) {
         print_help(argv[0]);
         exit(1);
     }
+    
+    //TODO fork then exec ffmpeg to split up source file into component bmp files 
+    
+    //TODO split up text file into portions equivalent to the number of frames 
+    
+    //TODO spin off number of threads to conduct steg operations 
+    
+    //TODO 
 
     if(mode){
         encode(argv[2], argv[3], argv[4]);
