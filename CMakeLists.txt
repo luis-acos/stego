@@ -1,6 +1,17 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.5.1)
 project(isteg C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(isteg main.c bitmap.c bitmap.h util.h util.c stego.c stego.h)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/build)
+
+add_subdirectory(build)
+
+add_subdirectory(util/lib)
+add_subdirectory(util/src)
+
+add_subdirectory(bitmap/lib)
+add_subdirectory(bitmap/src)
+
+add_subdirectory(stego/lib)
+add_subdirectory(stego/src)
