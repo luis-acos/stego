@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5.1)
-project(isteg C)
+project(vsteg C)
 
 set(CMAKE_C_STANDARD 11)
 
