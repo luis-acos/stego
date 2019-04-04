@@ -20,8 +20,8 @@ cmake --build .
 *** Image Steganography by LSB substitution ***
 
 Usage:  
-./isteg [-e] <text file to encode> <source bitmap> <destination bitmap>
-./isteg [-d] <encoded bitmap> <decoded file>
+./vsteg [-e] <text file to encode> <source video> <destination video>
+./vsteg [-d] <encoded video> <decoded file>
 
 -e : Encode text in image
 -d : Decode text from image
