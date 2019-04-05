@@ -1,4 +1,5 @@
 # Simple Image Steganography using LSB encoding
+-Now updated with maybe video steg!
 
 Usage Notes 
 
