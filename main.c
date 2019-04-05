@@ -60,16 +60,17 @@ Splits the files into bmp files
 void split_ffmepg (char *video, int mode)   
 {
     //fmpeg split video into component parts
-    char instructions[] = { "-i big_buck_bunny_480p_stereo frame%010.bmp -hide_banner" };
+    char instructions[] = { "-i big_buck_bunny_480p_stereo.avi frame%09d.bmp -hide_banner" };
     execv(FFMPEG_PATH, instructions[]);
 }
 
 /*
-Joins the files into a single avi file a
+Joins the files into a single avi file
+TO DO allow for custom inputs / modify fps, resolution, pixel format?
 */
 void join_ffmepg (char *video, int mode)   
 {
-    char instructions[] = { "" };
+    char instructions[] = { "-r 24 -f image2 -s 854x480 -i frame%09d.png -vcodec [lossless codec] -crf 25 -pix_fmt output.avi" };
     execv(FFMPEG_PATH, instructions[]);
 }
 
@@ -100,7 +101,7 @@ int main(int argc, char **argv) {
     pid = fork();
     
     if (pid == 0)
-        split_ffmpeg( ,mode);
+        split_ffmpeg(NULL ,mode);
   
     else if(pid > 0)
         encode_decode( mode);
