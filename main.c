@@ -11,17 +11,15 @@
 
 #define FFMPEG_PATH "/usr/bin/ffmpeg"
 
-#define IMAGE_OUTPUT_NAME 
-
 pthread thread_store[NUM_THREADS];
 
 void print_help(char *path){
     printf("*** Image Steganography by LSB substitution ***\n\n"
            "Usage:  \n"
-           "%s [-e] <text file to encode> <source bitmap> <destination bitmap>\n"
-           "%s [-d] <encoded bitmap> <decoded file>\n\n"
-           "-e : Encode text in image\n"
-           "-d : Decode text from image\n",
+           "%s [-e] <text file to encode> <source video> <destination video>\n"
+           "%s [-d] <encoded video> <decoded file>\n\n"
+           "-e : Encode text in video\n"
+           "-d : Decode text from video\n",
            path, path);
 }
 
@@ -56,10 +54,23 @@ void encode_decode (int mode)
     }
 }
 
-void exec_ffmepg (char *video)   
+/*
+Splits the files into bmp files
+*/
+void split_ffmepg (char *video, int mode)   
 {
-    //fmpeg split video into component parts 
-    execv();
+    //fmpeg split video into component parts
+    char instructions[] = { "-i big_buck_bunny_480p_stereo frame%010.bmp -hide_banner" };
+    execv(FFMPEG_PATH, instructions[]);
+}
+
+/*
+Joins the files into a single avi file a
+*/
+void join_ffmepg (char *video, int mode)   
+{
+    char instructions[] = { "" };
+    execv(FFMPEG_PATH, instructions[]);
 }
 
 int main(int argc, char **argv) {
@@ -87,14 +98,12 @@ int main(int argc, char **argv) {
     
     //TODO fork then exec ffmpeg to split up source file into component bmp files, wait for completion then encode/decode 
     pid = fork();
+    
     if (pid == 0)
-    { 
-         exec_ffmpeg();
-    }
-    else
-    {
-        encode_decode(mode);
-    }
+        split_ffmpeg( ,mode);
+  
+    else if(pid > 0)
+        encode_decode( mode);
     
     //delete the temp bmp files from directory
     //execv rm -rf *.bmp
