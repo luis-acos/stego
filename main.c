@@ -9,6 +9,8 @@
 
 #define NUM_THREADS 4
 
+#define NUM_FRAMES
+
 #define FFMPEG_PATH "/usr/bin/ffmpeg"
 
 pthread thread_store[NUM_THREADS];
@@ -23,43 +25,13 @@ void print_help(char *path){
            path, path);
 }
 
-void encode_decode (int mode)
-{
-    if(mode){
-        //TODO split up text file into portions equivalent to the number of frames? or some other form of parsing 
-        
-        //TODO spin off number of threads to conduct encode operation
-        
-        for(int i = 0; i < NUM_Threads; i++)   
-            pthread_create(thread_store[i], NULL, *encode(), NULL);
-        
-        encode(argv[2], argv[3], argv[4]);
-        
-        // join threads
-        
-        //TODO fork then exec ffmpeg to join files back into a single ouput video (ensure same size and frame rate as source, use lossless codec)
-        //put ffmpeg arguments here, theyre pretty long and detailed    
-        
-    } else {
-        //TODO spin off number of threads to conduct decode operation
-        
-        for (int i = 0; i < NUM_THREADS; i++)
-            pthread_create(thread_store[i], NULL, *decode(), NULL);
-        
-        //join threads
-        
-        //TODO should output a single text file, figure out how to join multiple txt files (mutex that doesnt ruin parrallelization?)
-        
-        decode(argv[2], argv[3]);
-    }
-}
-
 /*
-Splits the files into bmp files
+Splits the video file into bmp files
 */
 void split_ffmepg (char *video, int mode)   
 {
-    //fmpeg split video into component parts
+    printf("Parsing video into frames, this may take a while.\n");
+        
     char instructions[] = { "-i big_buck_bunny_480p_stereo.avi frame%09d.bmp -hide_banner" };
     execv(FFMPEG_PATH, instructions[]);
 }
@@ -68,10 +40,48 @@ void split_ffmepg (char *video, int mode)
 Joins the files into a single avi file
 TO DO allow for custom inputs / modify fps, resolution, pixel format?
 */
-void join_ffmepg (char *video, int mode)   
+void join_ffmpeg (char *video, int mode)   
 {
-    char instructions[] = { "-r 24 -f image2 -s 854x480 -i frame%09d.png -vcodec [lossless codec] -crf 25 -pix_fmt output.avi" };
+    printf("Joining frames into encoded video. Time to grab some tea.\n");
+    
+    char instructions[] = { "-r 24 -s 854x480 -i frame%09d.png -vcodec ffv1 -crf 25 output.avi" };
     execv(FFMPEG_PATH, instructions[]);
+}
+
+void clean_up_images() 
+{    
+    printf("Cleaning up image files from pwd.\n");
+    execv("/usr/bin/rm", "-rf *.bmp");
+}
+
+void encode_decode (int mode)
+{
+    join_ffmpeg();
+    
+    if(mode){  
+        for(int i = 0; i < NUM_Threads; i++)   
+            pthread_create(thread_store[i], NULL, *encode(), NULL);
+        
+        encode(argv[2], argv[3], argv[4]);
+        // join threads
+        for (int i = 0; i < NUM_THREADS; i++)
+            pthread_join();
+        
+        //TODO fork then exec ffmpeg to join files back into a single ouput video (ensure same size and frame rate as source, use lossless codec)
+        //put ffmpeg arguments here, theyre pretty long and detailed    
+        join_ffmpeg();
+        
+    } else {
+        for (int i = 0; i < NUM_THREADS; i++)
+            pthread_create(thread_store[i], NULL, *decode(), NULL);
+        
+        //join threads
+        for (int i = 0; i < NUM_THREADS; i++)
+            pthread_join();
+        
+        //TODO should output a single text file, figure out how to join multiple txt files (mutex that doesnt ruin parrallelization?)
+        decode(argv[2], argv[3]);
+    }
 }
 
 int main(int argc, char **argv) {
@@ -101,13 +111,13 @@ int main(int argc, char **argv) {
     pid = fork();
     
     if (pid == 0)
-        split_ffmpeg(NULL ,mode);
+        split_ffmpeg(NULL, mode);
   
     else if(pid > 0)
-        encode_decode( mode);
+        encode_decode(mode);
     
     //delete the temp bmp files from directory
-    //execv rm -rf *.bmp
+    clean_up_images();
     
     return EXIT_SUCCESS;
 }
