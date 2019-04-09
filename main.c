@@ -9,14 +9,19 @@
 
 #define NUM_THREADS 4
 
-#define NUM_FRAMES
-
 #define FFMPEG_PATH "/usr/bin/ffmpeg"
 
 pthread thread_store[NUM_THREADS];
 
+int num_frames = 0;
+
+int char_per_frame = 0; 
+
+/*
+Provides an explanation of command line arguments 
+*/
 void print_help(char *path){
-    printf("*** Image Steganography by LSB substitution ***\n\n"
+    printf("*** Video Steganography by LSB substitution ***\n\n"
            "Usage:  \n"
            "%s [-e] <text file to encode> <source video> <destination video>\n"
            "%s [-d] <encoded video> <decoded file>\n\n"
@@ -33,7 +38,7 @@ void split_ffmepg (char *video, int mode)
     printf("Parsing video into frames, this may take a while.\n");
         
     char instructions[] = { "-i big_buck_bunny_480p_stereo.avi frame%09d.bmp -hide_banner" };
-    execv(FFMPEG_PATH, instructions[]);
+    execv(FFMPEG_PATH, instructions);
 }
 
 /*
@@ -45,7 +50,7 @@ void join_ffmpeg (char *video, int mode)
     printf("Joining frames into encoded video. Time to grab some tea.\n");
     
     char instructions[] = { "-r 24 -s 854x480 -i frame%09d.png -vcodec ffv1 -crf 25 output.avi" };
-    execv(FFMPEG_PATH, instructions[]);
+    execv(FFMPEG_PATH, instructions);
 }
 
 void clean_up_images() 
@@ -54,33 +59,35 @@ void clean_up_images()
     execv("/usr/bin/rm", "-rf *.bmp");
 }
 
-void encode_decode (int mode)
+void encode_decode (int mode, char **argv)
 {
-    join_ffmpeg();
+    split_ffmpeg();
     
-    if(mode){  
-        for(int i = 0; i < NUM_Threads; i++)   
-            pthread_create(thread_store[i], NULL, *encode(), NULL);
+    if(mode){        
+        char instructions[] = { argv[2], argv[3], argv[4]};
         
-        encode(argv[2], argv[3], argv[4]);
+        for(int i = 0; i < NUM_Threads; i++)   
+            pthread_create(thread_store[i], NULL, *encode(), instructions);
+        
         // join threads
         for (int i = 0; i < NUM_THREADS; i++)
             pthread_join();
         
-        //TODO fork then exec ffmpeg to join files back into a single ouput video (ensure same size and frame rate as source, use lossless codec)
+        //TO DO fork then exec ffmpeg to join files back into a single ouput video (ensure same size and frame rate as source, use lossless codec)
         //put ffmpeg arguments here, theyre pretty long and detailed    
         join_ffmpeg();
         
-    } else {
+    } else {       
+        char instructions[] = {argv[2], argv[3]}
+            
         for (int i = 0; i < NUM_THREADS; i++)
-            pthread_create(thread_store[i], NULL, *decode(), NULL);
+            pthread_create(thread_store[i], NULL, *decode(), instructions);
         
         //join threads
         for (int i = 0; i < NUM_THREADS; i++)
             pthread_join();
         
-        //TODO should output a single text file, figure out how to join multiple txt files (mutex that doesnt ruin parrallelization?)
-        decode(argv[2], argv[3]);
+        //TO DO should output a single text file, figure out how to join multiple txt files (mutex that doesnt ruin parrallelization?)
     }
 }
 
@@ -104,17 +111,19 @@ int main(int argc, char **argv) {
         exit(1);
     }
     
-    //TODO POSSIBLE use ffprobe to populate file data and control variables (size of txt each BMP can store, etc) 
+    //TO DO POSSIBLE use ffprobe to populate file data and control variables (size of txt each BMP can store, etc) 
     //(requires parsing JSON or CSV)
     
-    //TODO fork then exec ffmpeg to split up source file into component bmp files, wait for completion then encode/decode 
+    //parse_video_info(); 
+    
+    //TO DO fork then exec ffmpeg to split up source file into component bmp files, wait for completion then encode/decode 
     pid = fork();
     
     if (pid == 0)
         split_ffmpeg(NULL, mode);
   
     else if(pid > 0)
-        encode_decode(mode);
+        encode_decode(mode, argv);
     
     //delete the temp bmp files from directory
     clean_up_images();
