@@ -10,13 +10,14 @@
 #define NUM_THREADS 8
 
 #define FFMPEG_PATH "/usr/bin/ffmpeg"
+#define SPLIT_PATH "usr/bin/split"
+#define RM_PATH "/bin/rm"
 
 pthread thread_store[NUM_THREADS];
 
+//hardcoded to default values pending change by parsing function
 int num_frames = 14315;
-
 int chars_in_text = 399122;
-
 int chars_per_frame = 51240;
 
 int frames_to_encode = ( chars_in_text / chars_per_frame ) + 1; 
@@ -40,9 +41,20 @@ void print_help(char *path){
 TO DO
 Execv into ffprobe, produce info, then parse info into string array 
 */
-char* parse_video_info(char *video)
+void parse_video_info(char *video)
 {
     return video;
+}
+
+/*
+Splits the given text file into multiple smallers text files for passing to encode/decode strings 
+*/
+void split_text()
+{
+    printf ("Splitting source into multiple text files.")
+    
+    char instructions[] = {"-b 52140 Princess\Of\Mars.txt --additional-suffix=.txt"};     
+    execv(SPLIT_PATH, );
 }
 
 /*
@@ -71,7 +83,7 @@ void join_ffmpeg (char *video, int mode)
 void clean_up_images() 
 {    
     printf("Cleaning up image files from pwd.\n");
-    execv("/usr/bin/rm", "-rf *.bmp");
+    execv(RM_PATH, "-rf *.bmp");
 }
 
 void encode_decode (int mode, char **argv)
@@ -81,7 +93,7 @@ void encode_decode (int mode, char **argv)
     if(mode){        
         char instructions[] = { argv[2], argv[3], argv[4]};
         
-        for (int frame_seq; frame_seq < frames_to_encode; frame_seq += NUM_THREADS) 
+        for (int frame_seq = 0; frame_seq < frames_to_encode; frame_seq += NUM_THREADS) 
         {
             //spin off NUM_THREADS encode threads
             for(int i = 0; i < NUM_Threads; i++)   
@@ -99,7 +111,7 @@ void encode_decode (int mode, char **argv)
     } else {       
         char instructions[] = {argv[2], argv[3]}
         
-        for (int frame_seq; frame_seq < frames_to_encode; frame_seq += NUM_THREADS) 
+        for (int frame_seq = 0; frame_seq < frames_to_encode; frame_seq += NUM_THREADS) 
         {
             //spin off NUM_THREADS decode threads
             for (int i = 0; i < NUM_THREADS; i++)
@@ -109,7 +121,8 @@ void encode_decode (int mode, char **argv)
             for (int i = 0; i < NUM_THREADS; i++)
                 pthread_join(thread_store[i], NULL);
         }
-        //TO DO should output a single text file, figure out how to join multiple txt files (mutex that doesnt ruin parrallelization?)
+        //TO DO should output a single text file, figure out how to join multiple txt files 
+        //(mutex that doesnt ruin parrallelization?)
     }
 }
 
