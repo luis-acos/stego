@@ -53,7 +53,7 @@ void split_text()
 {
     printf ("Splitting source into multiple text files.")
     
-    char instructions[] = {"-b 52140 Princess\Of\Mars.txt --additional-suffix=.txt"};     
+    char instructions[] = {"-b 52140 Princess\\Of\\Mars.txt --additional-suffix=.txt"};     
     execv(SPLIT_PATH, );
 }
 
