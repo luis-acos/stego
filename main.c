@@ -7,15 +7,21 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-#define NUM_THREADS 4
+#define NUM_THREADS 8
 
 #define FFMPEG_PATH "/usr/bin/ffmpeg"
 
 pthread thread_store[NUM_THREADS];
 
-int num_frames = 0;
+int num_frames = 14315;
 
-int char_per_frame = 0; 
+int chars_in_text = 399122;
+
+int chars_per_frame = 51240;
+
+int frames_to_encode = ( chars_in_text / chars_per_frame ) + 1; 
+
+//int chars_per_frame = width * height; 
 
 /*
 Provides an explanation of command line arguments 
@@ -28,6 +34,15 @@ void print_help(char *path){
            "-e : Encode text in video\n"
            "-d : Decode text from video\n",
            path, path);
+}
+
+/*
+TO DO
+Execv into ffprobe, produce info, then parse info into string array 
+*/
+char* parse_video_info(char *video)
+{
+    return video;
 }
 
 /*
@@ -66,12 +81,16 @@ void encode_decode (int mode, char **argv)
     if(mode){        
         char instructions[] = { argv[2], argv[3], argv[4]};
         
-        for(int i = 0; i < NUM_Threads; i++)   
-            pthread_create(thread_store[i], NULL, *encode(), instructions);
-        
-        // join threads
-        for (int i = 0; i < NUM_THREADS; i++)
-            pthread_join();
+        for (int frame_seq; frame_seq < frames_to_encode; frame_seq += NUM_THREADS) 
+        {
+            //spin off NUM_THREADS encode threads
+            for(int i = 0; i < NUM_Threads; i++)   
+                pthread_create(thread_store[i], NULL, *encode(), instructions);
+            
+            //join threads
+            for (int i = 0; i < NUM_THREADS; i++)
+                pthread_join(thread_store[i], NULL);
+        }
         
         //TO DO fork then exec ffmpeg to join files back into a single ouput video (ensure same size and frame rate as source, use lossless codec)
         //put ffmpeg arguments here, theyre pretty long and detailed    
@@ -79,14 +98,17 @@ void encode_decode (int mode, char **argv)
         
     } else {       
         char instructions[] = {argv[2], argv[3]}
-            
-        for (int i = 0; i < NUM_THREADS; i++)
-            pthread_create(thread_store[i], NULL, *decode(), instructions);
         
-        //join threads
-        for (int i = 0; i < NUM_THREADS; i++)
-            pthread_join();
+        for (int frame_seq; frame_seq < frames_to_encode; frame_seq += NUM_THREADS) 
+        {
+            //spin off NUM_THREADS decode threads
+            for (int i = 0; i < NUM_THREADS; i++)
+                pthread_create(thread_store[i], NULL, *decode(), instructions);
         
+            //join threads
+            for (int i = 0; i < NUM_THREADS; i++)
+                pthread_join(thread_store[i], NULL);
+        }
         //TO DO should output a single text file, figure out how to join multiple txt files (mutex that doesnt ruin parrallelization?)
     }
 }
