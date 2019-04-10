@@ -51,10 +51,10 @@ Splits the given text file into multiple smallers text files for passing to enco
 */
 void split_text()
 {
-    printf ("Splitting source into multiple text files.")
+    printf ("Splitting source into multiple text files.");
     
     char instructions[] = {"-b 52140 Princess\\Of\\Mars.txt --additional-suffix=.txt"};     
-    execv(SPLIT_PATH, );
+    execv(SPLIT_PATH, instructions);
 }
 
 /*
@@ -80,16 +80,26 @@ void join_ffmpeg (char *video, int mode)
     execv(FFMPEG_PATH, instructions);
 }
 
-void clean_up_images() 
-{    
-    printf("Cleaning up image files from pwd.\n");
-    execv(RM_PATH, "-rf *.bmp");
+void clean_up() 
+{   
+    pid_t pid;
+    
+    pid = fork();
+    
+    if (pid == 0)
+    {
+        printf("Deleting temp image files from pwd.\n");
+            execv(RM_PATH, "-rf *.bmp");
+    }
+    else
+    {
+        printf("Deleting temp image files from pwd.\n);
+            execv(RM_PATH, "-rf *.txt");
+    }
 }
 
 void encode_decode (int mode, char **argv)
-{
-    split_ffmpeg();
-    
+{  
     if(mode){        
         char instructions[] = { argv[2], argv[3], argv[4]};
         
@@ -152,16 +162,25 @@ int main(int argc, char **argv) {
     //parse_video_info(); 
     
     //TO DO fork then exec ffmpeg to split up source file into component bmp files, wait for completion then encode/decode 
+    fork();
     pid = fork();
     
     if (pid == 0)
-        split_ffmpeg(NULL, mode);
-  
+        split_ffmpeg(argv[1], mode);
+     
     else if(pid > 0)
-        encode_decode(mode, argv);
+    {
+        pid = fork();
+        
+        if (pid == 0)
+            split_text(argv[1], mode);
+        
+        else
+            encode_decode(mode, argv);
+    }
     
     //delete the temp bmp files from directory
-    clean_up_images();
+    clean_up();
     
     return EXIT_SUCCESS;
 }
