@@ -54,7 +54,8 @@ void split_text(char *text)
 {
     printf ("Splitting source text into multiple text files.");
     
-    char instructions[] = {"-b input.txt -N 8 -d --additional-suffix=.txt"};     
+    //tested and works; note, the files may have different names depending on environment, have to test this in docker
+    char instructions[] = {"input.txt -n 8 -d --additional-suffix=.txt"};     
     execv(SPLIT_PATH, instructions);
 }
 
@@ -94,8 +95,9 @@ void clean_up()
     }
     else
     {
+        //tested as working 
         printf("Deleting temp text files from pwd.\n);
-            execv(RM_PATH, "-rf 00.txt 01.txt 02.txt 03.txt 04.txt 05.txt 06.txt 07.txt 08.txt 09.txt");
+            execv(RM_PATH, "-rf x00.txt x01.txt x02.txt x03.txt x04.txt x05.txt x06.txt x07.txt");
     }
 }
 
