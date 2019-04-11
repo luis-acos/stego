@@ -6,6 +6,7 @@
 #include <pthread.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <string.h>
 
 #define NUM_THREADS 8
 
@@ -47,13 +48,13 @@ void parse_video_info(char *video)
 }
 
 /*
-Splits the given text file into multiple smallers text files for passing to encode/decode strings 
+Splits the given text file into multiple smaller text files for passing to encode/decode strings 
 */
-void split_text()
+void split_text(char *text)
 {
-    printf ("Splitting source into multiple text files.");
+    printf ("Splitting source text into multiple text files.");
     
-    char instructions[] = {"-b 52140 Princess\\Of\\Mars.txt --additional-suffix=.txt"};     
+    char instructions[] = {"-b input.txt -N 10 -d --additional-suffix=.txt"};     
     execv(SPLIT_PATH, instructions);
 }
 
@@ -63,7 +64,7 @@ Splits the video file into bmp files
 void split_ffmepg (char *video, int mode)   
 {
     printf("Parsing video into frames, this may take a while.\n");
-        
+    
     char instructions[] = { "-i big_buck_bunny_480p_stereo.avi frame%09d.bmp -hide_banner" };
     execv(FFMPEG_PATH, instructions);
 }
@@ -93,8 +94,8 @@ void clean_up()
     }
     else
     {
-        printf("Deleting temp image files from pwd.\n);
-            execv(RM_PATH, "-rf *.txt");
+        printf("Deleting temp text files from pwd.\n);
+            execv(RM_PATH, "-rf 00.txt 01.txt 02.txt 03.txt 04.txt 05.txt 06.txt 07.txt 08.txt 09.txt");
     }
 }
 
