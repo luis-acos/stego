@@ -21,7 +21,7 @@ int num_frames = 14315;
 int chars_in_text = 399122;
 int chars_per_frame = 51240;
 
-int frames_to_encode = ( chars_in_text / chars_per_frame ) + 1; 
+int frames_to_encode = NUM_THREADS; 
 
 //int chars_per_frame = width * height; 
 
@@ -54,14 +54,14 @@ void split_text(char *text)
 {
     printf ("Splitting source text into multiple text files.");
     
-    char instructions[] = {"-b input.txt -N 10 -d --additional-suffix=.txt"};     
+    char instructions[] = {"-b input.txt -N 8 -d --additional-suffix=.txt"};     
     execv(SPLIT_PATH, instructions);
 }
 
 /*
 Splits the video file into bmp files
 */
-void split_ffmepg (char *video, int mode)   
+void split_ffmpeg (char *video, int mode)   
 {
     printf("Parsing video into frames, this may take a while.\n");
     
@@ -102,10 +102,8 @@ void clean_up()
 void encode_decode (int mode, char **argv)
 {  
     if(mode){        
-        char instructions[] = { argv[2], argv[3], argv[4]};
+        char instructions[] = { argv[2], argv[3], argv[4] };
         
-        for (int frame_seq = 0; frame_seq < frames_to_encode; frame_seq += NUM_THREADS) 
-        {
             //spin off NUM_THREADS encode threads
             for(int i = 0; i < NUM_Threads; i++)   
                 pthread_create(thread_store[i], NULL, *encode(), instructions);
@@ -113,7 +111,6 @@ void encode_decode (int mode, char **argv)
             //join threads
             for (int i = 0; i < NUM_THREADS; i++)
                 pthread_join(thread_store[i], NULL);
-        }
         
         //TO DO fork then exec ffmpeg to join files back into a single ouput video (ensure same size and frame rate as source, use lossless codec)
         //put ffmpeg arguments here, theyre pretty long and detailed    
@@ -121,9 +118,7 @@ void encode_decode (int mode, char **argv)
         
     } else {       
         char instructions[] = {argv[2], argv[3]}
-        
-        for (int frame_seq = 0; frame_seq < frames_to_encode; frame_seq += NUM_THREADS) 
-        {
+
             //spin off NUM_THREADS decode threads
             for (int i = 0; i < NUM_THREADS; i++)
                 pthread_create(thread_store[i], NULL, *decode(), instructions);
@@ -131,7 +126,7 @@ void encode_decode (int mode, char **argv)
             //join threads
             for (int i = 0; i < NUM_THREADS; i++)
                 pthread_join(thread_store[i], NULL);
-        }
+
         //TO DO should output a single text file, figure out how to join multiple txt files 
         //(mutex that doesnt ruin parrallelization?)
     }
