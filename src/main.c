@@ -12,7 +12,7 @@
 
 #define FFMPEG_PATH "/usr/bin/ffmpeg"
 #define SPLIT_PATH "usr/bin/split"
-#define CAT_PATH "usr/bin/cat"
+#define CAT_PATH "/bin/cat"
 #define RM_PATH "/bin/rm"
 
 pthread_t thread_store[NUM_THREADS];
@@ -60,7 +60,7 @@ void split_text(char *text)
     printf ("Splitting source text into multiple text files.");
     
     //tested and works; note, the files may have different names depending on environment, have to test this in docker
-    char instructions[] = {"input.txt -n 8 -d --additional-suffix=.sws"};     
+    char *instructions = {"input.txt -n 8 -d --additional-suffix=.sws"};     
     execv(SPLIT_PATH, instructions);
 }
 
@@ -69,7 +69,7 @@ void join_text()
     printf ("Joining source text files into single output text file.");
     
     //test pending
-    char instructions[] = {"x00.sws x01.sws x02.sws x03.sws x04.sws x05.sws x06.sws x07.sws > output.txt"};     
+    char *instructions = {"x00.sws x01.sws x02.sws x03.sws x04.sws x05.sws x06.sws x07.sws > output.txt"};     
     execv(CAT_PATH, instructions);
 }
 
@@ -80,7 +80,7 @@ void split_ffmpeg (char *video, int mode)
 {
     printf("Parsing video into frames, this may take a while.\n");
     
-    char instructions[] = { "-i big_buck_bunny_480p_stereo.avi frame%09d.bmp -hide_banner" };
+    char *instructions = { "-i big_buck_bunny_480p_stereo.avi frame%09d.bmp -hide_banner" };
     execv(FFMPEG_PATH, instructions);
 }
 
@@ -92,7 +92,7 @@ void join_ffmpeg ()
 {
     printf("Joining frames into encoded video. Time to grab some tea.\n");
     
-    char instructions[] = { "-r 24 -s 854x480 -i frame%09d.png -vcodec ffv1 -crf 25 output.avi" };
+    char *instructions = { "-r 24 -s 854x480 -i frame%09d.png -vcodec ffv1 -crf 25 output.avi" };
     execv(FFMPEG_PATH, instructions);
 }
 
@@ -104,15 +104,17 @@ void clean_up()
     
     if (pid == 0)
     {
+        //tested as working shell script 
         printf("Deleting temp image files from pwd.\n");
-            execv(RM_PATH, "-rf *.bmp");
+        char *instructions = { "-rf *.sws" };  
+        execv(RM_PATH, instructions);
     }
     else
     {
         //tested as working 
         printf("Deleting temp text files from pwd.\n");
-        char instructions[] = { "-rf *.sws" };
-            execv(RM_PATH, instructions);
+        char *instructions = { "-rf *.sws" };
+        execv(RM_PATH, instructions);
     }
 }
 
