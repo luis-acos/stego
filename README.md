@@ -28,10 +28,11 @@ Usage:
 -d : Decode text from image
 ~~~~
 
-Helper Method Signatures 
+### Helper Method Signatures 
 
+~~~
 bool encode(char *text_source, char *original_image, char *destination_image)
 
 bool decode(char *image_source, char *text_destination)
-
+~~~
 
