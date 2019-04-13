@@ -23,7 +23,7 @@ int chars_in_text = 399122;
 int chars_per_frame = 51240;
 
 char *text_store[NUM_THREADS] = { "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", "x06.sws", "x07.sws"};
-char *frame[NUM_THREADS] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000003.bmp", "frame000000004.bmp", 
+char *frame_store[NUM_THREADS] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000003.bmp", "frame000000004.bmp", 
                                 "frame000000005.bmp", "frame000000006.bmp", "frame000000007.bmp", "frame000000008.bmp"};
 
 int frames_to_encode = NUM_THREADS; 
@@ -129,7 +129,7 @@ void encode_decode (int mode, char **argv)
               instructions[0] = text_store[i]; 
               instructions[1] = frame_store[i]; 
               instructions[2] = frame_store[i]; 
-                pthread_create(thread_store[i], NULL, encode(), instructions);
+              pthread_create(thread_store[i], NULL, encode(), &instructions);
             }
       
             //join threads
@@ -147,11 +147,11 @@ void encode_decode (int mode, char **argv)
             for (int i = 0; i < NUM_THREADS; i++)
             {
               //creates a number of text files to store data into 
-              fopen(text_stpre[i], "a");
+              fopen(text_store[i], "a");
               
               instructions[0] = frame_store[i];
               instructions[1] = text_store[i];
-              pthread_create(thread_store[i], NULL, decode(), instructions);
+              pthread_create(thread_store[i], NULL, decode(), &instructions);
             }
 
             //join threads
