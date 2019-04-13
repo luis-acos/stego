@@ -12,6 +12,7 @@
 
 #define FFMPEG_PATH "/usr/bin/ffmpeg"
 #define SPLIT_PATH "usr/bin/split"
+#define CAT_PATH "usr/bin/cat"
 #define RM_PATH "/bin/rm"
 
 pthread_t thread_store[NUM_THREADS];
@@ -20,6 +21,8 @@ pthread_t thread_store[NUM_THREADS];
 int num_frames = 14315;
 int chars_in_text = 399122;
 int chars_per_frame = 51240;
+
+char *text_store[NUM_THREADS] = { "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", "x06.sws", "x07.sws"};
 
 int frames_to_encode = NUM_THREADS; 
 
@@ -55,8 +58,17 @@ void split_text(char *text)
     printf ("Splitting source text into multiple text files.");
     
     //tested and works; note, the files may have different names depending on environment, have to test this in docker
-    char instructions[] = {"input.txt -n 8 -d --additional-suffix=.txt"};     
+    char instructions[] = {"input.txt -n 8 -d --additional-suffix=.sws"};     
     execv(SPLIT_PATH, instructions);
+}
+
+void join_text()
+{
+    printf ("Joining source text files into single output text file.");
+    
+    //test pending
+    char instructions[] = {"x00.sws x01.sws x02.sws x03.sws x04.sws x05.sws x06.sws x07.sws > output.txt"};     
+    execv(CAT_PATH, instructions);
 }
 
 /*
@@ -97,7 +109,7 @@ void clean_up()
     {
         //tested as working 
         printf("Deleting temp text files from pwd.\n");
-        char instructions[] = { "-rf x00.txt x01.txt x02.txt x03.txt x04.txt x05.txt x06.txt x07.txt" };
+        char instructions[] = { "-rf *.sws" };
             execv(RM_PATH, instructions);
     }
 }
@@ -132,6 +144,7 @@ void encode_decode (int mode, char **argv)
 
         //TO DO should output a single text file, figure out how to join multiple txt files 
         //(mutex that doesnt ruin parrallelization?)
+        join_text();
     }
 }
 
