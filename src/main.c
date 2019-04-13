@@ -74,7 +74,7 @@ void split_ffmpeg (char *video, int mode)
 Joins the files into a single avi file
 TO DO allow for custom inputs / modify fps, resolution, pixel format?
 */
-void join_ffmpeg (char *video, int mode)   
+void join_ffmpeg ()   
 {
     printf("Joining frames into encoded video. Time to grab some tea.\n");
     
@@ -96,8 +96,9 @@ void clean_up()
     else
     {
         //tested as working 
-        printf("Deleting temp text files from pwd.\n);
-            execv(RM_PATH, "-rf x00.txt x01.txt x02.txt x03.txt x04.txt x05.txt x06.txt x07.txt");
+        printf("Deleting temp text files from pwd.\n");
+        char instructions[] = { "-rf x00.txt x01.txt x02.txt x03.txt x04.txt x05.txt x06.txt x07.txt" };
+            execv(RM_PATH, instructions);
     }
 }
 
@@ -107,7 +108,7 @@ void encode_decode (int mode, char **argv)
         char instructions[] = { argv[2], argv[3], argv[4] };
         
             //spin off NUM_THREADS encode threads
-            for(int i = 0; i < NUM_Threads; i++)   
+            for(int i = 0; i < NUM_THREADS; i++)   
                 pthread_create(thread_store[i], NULL, *encode(), instructions);
             
             //join threads
@@ -119,7 +120,7 @@ void encode_decode (int mode, char **argv)
         join_ffmpeg();
         
     } else {       
-        char instructions[] = {argv[2], argv[3]}
+        char instructions[] = {argv[2], argv[3]};
 
             //spin off NUM_THREADS decode threads
             for (int i = 0; i < NUM_THREADS; i++)
@@ -171,7 +172,7 @@ int main(int argc, char **argv) {
         pid = fork();
         
         if (pid == 0)
-            split_text(argv[1], mode);
+            split_text(argv[1]);
         
         else
             encode_decode(mode, argv);
