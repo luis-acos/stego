@@ -1,3 +1,3 @@
-add_library(Stego Stego.h)
-add_library(Bitmap Bitmap.h)
-add_library(Util Util.h)
+add_library(Stego stego.h)
+add_library(Bitmap bitmap.h)
+add_library(Util util.h)
