@@ -22,8 +22,8 @@ int num_frames = 14315;
 int chars_in_text = 399122;
 int chars_per_frame = 51240;
 
-char text_store[NUM_THREADS][8] = { "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", "x06.sws", "x07.sws"};
-char frame[NUM_THREADS][19] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000003.bmp", "frame000000004.bmp", 
+char *text_store[NUM_THREADS] = { "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", "x06.sws", "x07.sws"};
+char *frame[NUM_THREADS] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000003.bmp", "frame000000004.bmp", 
                                 "frame000000005.bmp", "frame000000006.bmp", "frame000000007.bmp", "frame000000008.bmp"};
 
 int frames_to_encode = NUM_THREADS; 
@@ -121,12 +121,17 @@ void clean_up()
 void encode_decode (int mode, char **argv)
 {  
     if(mode){        
-        char instructions[] = { argv[2], argv[3], argv[4] };
+        char *instructions[3];
         
-            //spin off NUM_THREADS encode threads
-            for(int i = 0; i < NUM_THREADS; i++)   
-                pthread_create(thread_store[i], NULL, *encode(), instructions);
-            
+            //spin off NUM_THREADS encode frames
+            for(int i = 0; i < NUM_THREADS; i++)
+            {
+              instructions[0] = text_store[i]; 
+              instructions[1] = frame_store[i]; 
+              instructions[2] = frame_store[i]; 
+                pthread_create(thread_store[i], NULL, encode(), instructions);
+            }
+      
             //join threads
             for (int i = 0; i < NUM_THREADS; i++)
                 pthread_join(thread_store[i], NULL);
@@ -136,12 +141,19 @@ void encode_decode (int mode, char **argv)
         join_ffmpeg();
         
     } else {       
-        char instructions[] = {argv[2], argv[3]};
-
-            //spin off NUM_THREADS decode threads
+        char *instructions[2];
+      
+            //spin off NUM_THREADS decode frames
             for (int i = 0; i < NUM_THREADS; i++)
-                pthread_create(thread_store[i], NULL, *decode(), instructions);
-        
+            {
+              //creates a number of text files to store data into 
+              fopen(text_stpre[i], "a");
+              
+              instructions[0] = frame_store[i];
+              instructions[1] = text_store[i];
+              pthread_create(thread_store[i], NULL, decode(), instructions);
+            }
+
             //join threads
             for (int i = 0; i < NUM_THREADS; i++)
                 pthread_join(thread_store[i], NULL);
