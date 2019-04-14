@@ -29,8 +29,6 @@ char *frame_store[] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000
 
 int frames_to_encode = NUM_THREADS; 
 
-int chars_per_frame = width * height; 
-
 /*
 Provides an explanation of command line arguments 
 */
@@ -58,7 +56,7 @@ void split_text(char *text)
     printf ("Splitting source text into multiple text files.");
     
     //tested and works; note, the files may have different names depending on environment, have to test this in docker
-    char *instructions = {"input.txt", "-n", "8", "-d", "--additional-suffix=.sws", NULL};     
+    char *instructions[] = {"input.txt", "-n", "8", "-d", "--additional-suffix=.sws", NULL};     
     execv(SPLIT_PATH, instructions);
 }
 
@@ -79,7 +77,7 @@ void split_ffmpeg (char *video, int mode)
 {
     printf("Parsing video into frames, this may take a while.\n");
     
-    char *instructions = { "-i", "big_buck_bunny_480p_stereo.avi", "frame%09d.bmp", "-hide_banner", NULL };
+    char *instructions[] = { "-i", "big_buck_bunny_480p_stereo.avi", "frame%09d.bmp", "-hide_banner", NULL };
     execv(FFMPEG_PATH, instructions);
 }
 
@@ -202,7 +200,7 @@ int main(int argc, char **argv) {
         split_text(argv[1]);
   
     if (split_text_pid > 0)
-      wait(split_text_pid, &split_text_status, 0);
+      waitpid(split_text_pid, &split_text_status, 0);
  
     encode_decode(mode, argv);  
   
