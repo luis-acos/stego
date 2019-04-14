@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/wait.h>
 
 #define NUM_THREADS 8
 
@@ -22,13 +23,13 @@ int num_frames = 14315;
 int chars_in_text = 399122;
 int chars_per_frame = 51240;
 
-char *text_store[NUM_THREADS] = { "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", "x06.sws", "x07.sws"};
-char *frame_store[NUM_THREADS] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000003.bmp", "frame000000004.bmp", 
+char *text_store[] = { "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", "x06.sws", "x07.sws"};
+char *frame_store[] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000003.bmp", "frame000000004.bmp", 
                                 "frame000000005.bmp", "frame000000006.bmp", "frame000000007.bmp", "frame000000008.bmp"};
 
 int frames_to_encode = NUM_THREADS; 
 
-//int chars_per_frame = width * height; 
+int chars_per_frame = width * height; 
 
 /*
 Provides an explanation of command line arguments 
@@ -57,7 +58,7 @@ void split_text(char *text)
     printf ("Splitting source text into multiple text files.");
     
     //tested and works; note, the files may have different names depending on environment, have to test this in docker
-    char *instructions = {"input.txt -n 8 -d --additional-suffix=.sws"};     
+    char *instructions = {"input.txt", "-n", "8", "-d", "--additional-suffix=.sws", NULL};     
     execv(SPLIT_PATH, instructions);
 }
 
@@ -66,7 +67,8 @@ void join_text()
     printf ("Joining source text files into single output text file.");
     
     //test pending
-    char *instructions = {"x00.sws x01.sws x02.sws x03.sws x04.sws x05.sws x06.sws x07.sws > output.txt"};     
+    char *instructions[] = {"x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", 
+                            "x06.sws", "x07.sws", ">", "output.txt", NULL};     
     execv(CAT_PATH, instructions);
 }
 
@@ -77,7 +79,7 @@ void split_ffmpeg (char *video, int mode)
 {
     printf("Parsing video into frames, this may take a while.\n");
     
-    char *instructions = { "-i big_buck_bunny_480p_stereo.avi frame%09d.bmp -hide_banner" };
+    char *instructions = { "-i", "big_buck_bunny_480p_stereo.avi", "frame%09d.bmp", "-hide_banner", NULL };
     execv(FFMPEG_PATH, instructions);
 }
 
@@ -89,7 +91,8 @@ void join_ffmpeg ()
 {
     printf("Joining frames into encoded video. Time to grab some tea.\n");
     
-    char *instructions = { "-r 24 -s 854x480 -i frame%09d.png -vcodec ffv1 -crf 25 output.avi" };
+    char *instructions[] = { "-r", "24", "-s", "854x480", "-i", 
+                            "frame%09d.png", "-vcodec", "ffv1", "-crf", "25", "output.avi", NULL };
     execv(FFMPEG_PATH, instructions);
 }
 
@@ -103,14 +106,14 @@ void clean_up()
     {
         //tested as working shell script 
         printf("Deleting temp image files from pwd.\n");
-        char *instructions = { "-rf *.sws" };  
+        char *instructions[] = { "-rf", "*.sws", NULL };  
         execv(RM_PATH, instructions);
     }
     else
     {
         //tested as working 
         printf("Deleting temp text files from pwd.\n");
-        char *instructions = { "-rf *.sws" };
+        char *instructions[] = { "-rf", "*.sws", NULL };
         execv(RM_PATH, instructions);
     }
 }
@@ -163,8 +166,6 @@ void encode_decode (int mode, char **argv)
 
 int main(int argc, char **argv) {
 
-    pid_t pid; 
-    
     if ( argc != 5 && argc != 4 ) {
         print_help(argv[0]);
         exit(1);
@@ -182,28 +183,29 @@ int main(int argc, char **argv) {
     }
     
     //TO DO POSSIBLE use ffprobe to populate file data and control variables (size of txt each BMP can store, etc) 
-    //(requires parsing JSON or CSV)
-    
+    //(requires parsing JSON or CSV file)
     //parse_video_info(); 
     
-    //TO DO fork then exec ffmpeg to split up source file into component bmp files, wait for completion then encode/decode 
-    fork();
-    pid = fork();
+    int ffmpeg_status, split_text_status;
+  
+    pid_t ffmpeg_pid = fork();
     
-    if (pid == 0)
+    if (ffmpeg_pid == 0)
         split_ffmpeg(argv[1], mode);
-     
-    else if(pid > 0)
-    {
-        pid = fork();
-        
-        if (pid == 0)
-            split_text(argv[1]);
-        
-        else
-            encode_decode(mode, argv);
-    }
     
+    if(ffmpeg_pid > 0)
+      waitpid(ffmpeg_pid, &ffmpeg_status, 0);
+  
+    pid_t split_text_pid = fork();
+    
+    if (split_text_pid == 0)
+        split_text(argv[1]);
+  
+    if (split_text_pid > 0)
+      wait(split_text_pid, &split_text_status, 0);
+ 
+    encode_decode(mode, argv);  
+  
     //delete the temp bmp files from directory
     clean_up();
     
