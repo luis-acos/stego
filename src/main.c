@@ -60,7 +60,7 @@ void split_text(char *text)
     execv(SPLIT_PATH, instructions);
 }
 
-void join_text(char *ouput_text)
+void join_text(char *output_text)
 {
     printf ("Joining source text files into single output text file.");
     
