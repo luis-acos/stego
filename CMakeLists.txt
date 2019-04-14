@@ -18,4 +18,3 @@ add_subdirectory(lib/util)
 add_subdirectory(lib/stego)
 add_subdirectory(lib/bitmap)
 
-target_link_libraries(vsteg Threads::Threads)
