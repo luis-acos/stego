@@ -77,7 +77,7 @@ void split_ffmpeg (char *video, int mode)
 {
     printf("Parsing video into frames, this may take a while.\n");
     
-    char *instructions[] = { "-i", "big_buck_bunny_480p_stereo.avi", "frame%09d.bmp", "-hide_banner", NULL };
+    char *instructions[] = { "-i", "big_buck_bunny_480p_stereo_short.avi", "frame%09d.bmp", "-hide_banner", NULL };
     execv(FFMPEG_PATH, instructions);
 }
 
