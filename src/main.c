@@ -66,7 +66,7 @@ void join_text(char *ouput_text)
     
     //test pending
     char *instructions[] = {"cat", "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", 
-                            "x06.sws", "x07.sws", ">", output_txt, NULL};     
+                            "x06.sws", "x07.sws", ">", output_text, NULL};     
     execv(CAT_PATH, instructions);
 }
 
