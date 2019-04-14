@@ -16,7 +16,7 @@
 #define CAT_PATH "/bin/cat"
 #define RM_PATH "/bin/rm"
 
-pthread_t thread_store[NUM_THREADS];
+pthread_t *thread_store[NUM_THREADS];
 
 //hardcoded to default values pending change by parsing function
 int num_frames = 14315;
@@ -127,7 +127,7 @@ void encode_decode (int mode, char **argv)
               instructions[0] = text_store[i]; 
               instructions[1] = frame_store[i]; 
               instructions[2] = frame_store[i]; 
-              pthread_create(*thread_store[i], NULL, (void*) encode, &instructions);
+              pthread_create(thread_store[i], NULL, (void*) encode, &instructions);
             }
       
             //join threads
@@ -149,7 +149,7 @@ void encode_decode (int mode, char **argv)
               
               instructions[0] = frame_store[i];
               instructions[1] = text_store[i];
-              pthread_create(*thread_store[i], NULL, (void*) decode, &instructions);
+              pthread_create(thread_store[i], NULL, (void*) decode, &instructions);
             }
 
             //join threads
