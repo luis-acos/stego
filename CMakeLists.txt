@@ -6,6 +6,7 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 add_definitions(${GCC_COVERAGE_COMPILE_FLAGS})
 set (CMAKE_C_FLAGS "-g")
+set (CMAKE_C_FLAGS "-pthread")
 
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
@@ -15,4 +16,3 @@ add_subdirectory(src)
 add_subdirectory(lib/util)
 add_subdirectory(lib/stego)
 add_subdirectory(lib/bitmap)
-
