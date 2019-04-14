@@ -77,7 +77,7 @@ void split_ffmpeg (char *video, int mode)
 {
     printf("Parsing video into frames, this may take a while.\n");
     
-    char *instructions[] = {"ffmpeg", "-i", "big_buck_bunny_480p_stereo_short.avi", "frame%09d.bmp", "-hide_banner", NULL };
+    char *instructions[] = {"sudo", "ffmpeg", "-i", "big_buck_bunny_480p_stereo_short.avi", "frame%09d.bmp", "-hide_banner", NULL };
     execv(FFMPEG_PATH, instructions);
 }
 
@@ -104,7 +104,7 @@ void clean_up()
     {
         //tested as working shell script 
         printf("Deleting temp image files from pwd.\n");
-        char *instructions[] = {"rm", "-rf", "*.sws", NULL };  
+        char *instructions[] = {"rm", "-rf", "*.bmp", NULL };  
         execv(RM_PATH, instructions);
     }
     else
