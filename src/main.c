@@ -56,28 +56,28 @@ void split_text(char *text)
     printf ("Splitting source text into multiple text files.");
     
     //tested and works; note, the files may have different names depending on environment, have to test this in docker
-    char *instructions[] = {"split", "input.txt", "-n", "8", "-d", "--additional-suffix=.sws", NULL};     
+    char *instructions[] = {"split", text, "-n", "8", "-d", "--additional-suffix=.sws", NULL};     
     execv(SPLIT_PATH, instructions);
 }
 
-void join_text()
+void join_text(char *ouput_text)
 {
     printf ("Joining source text files into single output text file.");
     
     //test pending
     char *instructions[] = {"cat", "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", 
-                            "x06.sws", "x07.sws", ">", "output.txt", NULL};     
+                            "x06.sws", "x07.sws", ">", output_txt, NULL};     
     execv(CAT_PATH, instructions);
 }
 
 /*
 Splits the video file into bmp files
 */
-void split_ffmpeg (char *video, int mode)   
+void split_ffmpeg (char *video)   
 {
     printf("Parsing video into frames, this may take a while.\n");
     
-    char *instructions[] = {"sudo", "ffmpeg", "-i", "big_buck_bunny_480p_stereo_short.avi", "frame%09d.bmp", "-hide_banner", NULL };
+    char *instructions[] = {"ffmpeg", "-i", video, "frame%09d.bmp", "-hide_banner", NULL };
     execv(FFMPEG_PATH, instructions);
 }
 
@@ -158,7 +158,7 @@ void encode_decode (int mode, char **argv)
 
         //TO DO should output a single text file, figure out how to join multiple txt files 
         //(mutex that doesnt ruin parrallelization?)
-        join_text();
+        join_text(argv[2]);
     }
 }
 
@@ -189,7 +189,7 @@ int main(int argc, char **argv) {
     pid_t ffmpeg_pid = fork();
     
     if (ffmpeg_pid == 0)
-        split_ffmpeg(argv[1], mode);
+        split_ffmpeg(argv[1]);
     
     if(ffmpeg_pid > 0)
       waitpid(ffmpeg_pid, &ffmpeg_status, 0);
