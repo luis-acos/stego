@@ -191,6 +191,7 @@ int main(int argc, char **argv) {
     if (ffmpeg_pid == 0)
         split_ffmpeg(argv[3]);
     
+    printf("cp 1");
     waitpid(ffmpeg_pid, &ffmpeg_status, 0);
   
     pid_t split_text_pid = fork();
