@@ -191,16 +191,14 @@ int main(int argc, char **argv) {
     if (ffmpeg_pid == 0)
         split_ffmpeg(argv[3]);
     
-    if(ffmpeg_pid > 0)
-      waitpid(ffmpeg_pid, &ffmpeg_status, 0);
+    waitpid(ffmpeg_pid, &ffmpeg_status, 0);
   
     pid_t split_text_pid = fork();
     
     if (split_text_pid == 0)
         split_text(argv[2]);
   
-    if (split_text_pid > 0)
-      waitpid(split_text_pid, &split_text_status, 0);
+    waitpid(split_text_pid, &split_text_status, 0);
  
     encode_decode(mode, argv);  
   
