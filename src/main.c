@@ -55,15 +55,18 @@ void split_text(char *text)
 {
     printf ("Splitting source text into multiple text files.\n");
     
-    FILE *fp;
+    FILE * fp = fopen(text, "r+");
      
-    if( fp = fopen(text, "r") == NULL )
-       printf("Input file read failed.\n");
-    
-    text_store = (char**) malloc ( NUM_THREADS * sizeof(char*) );   
+    if(fp == NULL )
+    {
+      printf("Input file read failed.\n");
+      exit(1);
+    }
+           
+    text_store = (char**) malloc ( NUM_THREADS * sizeof(char *) );   
   
     for (int i = 0; i < NUM_THREADS; i++)
-      text_store[i] = malloc ( sizeof(char) * chars_per_frame ); 
+      text_store[i] = malloc ( chars_per_frame * sizeof(char)  ); 
     
     for(int j = 0; j < NUM_THREADS; j++)
       for(int k = 0; k < chars_per_frame;k++)
