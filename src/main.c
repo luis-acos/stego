@@ -22,7 +22,6 @@ int num_frames = 14315;
 int chars_in_text = 399122;
 int chars_per_frame = 51240;
 
-char *text_store[NUM_THREADS];
 char *frame_store[] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000003.bmp", "frame000000004.bmp", 
                                 "frame000000005.bmp", "frame000000006.bmp", "frame000000007.bmp", "frame000000008.bmp"};
 
@@ -59,8 +58,7 @@ void split_text(char *text)
     if( fp = fopen(text, "r") == NULL )
        printf("Input file read failed.\n");
     
-    for(int i = 0; i < NUM_THREADS; i++)
-      text_store[i] = malloc( sizeof(char) * chars_per_frame );
+    char text_store[NUM_THREADS][chars_per_frame];
 
     for(int j = 0; j < NUM_THREADS; j++)
       for(int k = 0; k < chars_per_frame;k++)
