@@ -56,7 +56,7 @@ void split_text(char *text)
     printf ("Splitting source text into multiple text files.");
     
     //tested and works; note, the files may have different names depending on environment, have to test this in docker
-    char *instructions[] = {"split", text, "-n", "8", "-d", "--additional-suffix=.sws", NULL};     
+    char *instructions[] = {"split", "input.txt", "-n", "8", "-d", "--additional-suffix=.sws", NULL};     
     execv(SPLIT_PATH, instructions);
 }
 
@@ -197,7 +197,7 @@ int main(int argc, char **argv) {
     pid_t split_text_pid = fork();
     
     if (split_text_pid == 0)
-        split_text(argv[1]);
+        split_text(argv[2]);
   
     waitpid(split_text_pid, &split_text_status, 0);
  
