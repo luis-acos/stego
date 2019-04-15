@@ -113,14 +113,16 @@ void clean_up()
     
     if (pid == 0)
     {
-        //tested as working shell script 
+        //tested as working from shell  
         printf("Deleting temp image files from pwd.\n");
         char *instructions[] = {"rm", "-rf", "*.bmp", NULL };  
         execv(RM_PATH, instructions);
     }
     else
     {
-        //tested as working 
+        for (int i = 0; i < NUM_THREADS; i++)
+          free(text_store); 
+        //tested as working from shell 
         printf("Deleting temp text files from pwd.\n");
         char *instructions[] = {"rm", "-rf", "*.sws", NULL };
         execv(RM_PATH, instructions);
@@ -195,23 +197,19 @@ int main(int argc, char **argv) {
     //(requires parsing JSON or CSV file)
     //parse_video_info(); 
     
-    int ffmpeg_status, split_text_status;
+    int ffmpeg_status;
   
     pid_t ffmpeg_pid = fork();
     
     if (ffmpeg_pid == 0)
         split_ffmpeg(argv[3]);
     
-    printf("cp 1");
+    printf("Split video complete.\n");
+  
     waitpid(ffmpeg_pid, &ffmpeg_status, 0);
+
+    split_text(argv[2]);
   
-    pid_t split_text_pid = fork();
-    
-    if (split_text_pid == 0)
-        split_text(argv[2]);
-  
-    waitpid(split_text_pid, &split_text_status, 0);
- 
     encode_decode(mode, argv);  
   
     //delete the temp bmp files from directory
