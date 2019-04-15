@@ -59,15 +59,15 @@ void split_text(char *text)
      
     if( fp = fopen(text, "r") == NULL )
        printf("Input file read failed.\n");
+    
+    text_store = (char**) malloc ( NUM_THREADS * sizeof(char*) );   
   
     for (int i = 0; i < NUM_THREADS; i++)
       text_store[i] = malloc ( sizeof(char) * chars_per_frame ); 
     
     for(int j = 0; j < NUM_THREADS; j++)
       for(int k = 0; k < chars_per_frame;k++)
-    {
         text_store[j][k] = fgetc(fp);
-    }
   
     fclose(fp);
 }
