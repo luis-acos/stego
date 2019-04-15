@@ -197,7 +197,7 @@ int main(int argc, char **argv) {
     pid_t split_text_pid = fork();
     
     if (split_text_pid == 0)
-        split_text(argv[2]);
+        split_text(argv[1]);
   
     waitpid(split_text_pid, &split_text_status, 0);
  
