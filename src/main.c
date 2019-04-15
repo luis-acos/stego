@@ -85,12 +85,12 @@ void split_ffmpeg (char *video)
 Joins the files into a single avi file
 TO DO allow for custom inputs / modify fps, resolution, pixel format?
 */
-void join_ffmpeg ()   
+void join_ffmpeg (char *output_video)   
 {
     printf("Joining frames into encoded video. Time to grab some tea.\n");
     
     char *instructions[] = {"ffmpeg", "-r", "24", "-s", "854x480", "-i", 
-                            "frame%09d.png", "-vcodec", "ffv1", "-crf", "25", "output.avi", NULL };
+                            "frame%09d.png", "-vcodec", "ffv1", "-crf", "25", output_video, NULL };
     execv(FFMPEG_PATH, instructions);
 }
 
@@ -136,7 +136,7 @@ void encode_decode (int mode, char **argv)
         
         //TO DO fork then exec ffmpeg to join files back into a single ouput video (ensure same size and frame rate as source, use lossless codec)
         //put ffmpeg arguments here, theyre pretty long and detailed    
-        join_ffmpeg();
+        join_ffmpeg(argv[4]);
         
     } else {       
         char *instructions[2];
