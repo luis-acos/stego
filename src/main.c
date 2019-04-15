@@ -88,7 +88,7 @@ void split_ffmpeg (char *video)
 {
     printf("Parsing video into frames, this may take a while.\n");
     
-    char *instructions[] = {"ffmpeg", "-i", video, "frame%09d.bmp", "-hide_banner", NULL };
+    char *instructions[] = {"ffmpeg", "-i", video, "frame%09d.bmp", NULL };
     execv(FFMPEG_PATH, instructions);
 }
 
