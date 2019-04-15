@@ -12,7 +12,6 @@
 #define NUM_THREADS 8
 
 #define FFMPEG_PATH "/usr/bin/ffmpeg"
-#define SPLIT_PATH "usr/bin/split"
 #define CAT_PATH "/bin/cat"
 #define RM_PATH "/bin/rm"
 
@@ -23,7 +22,7 @@ int num_frames = 14315;
 int chars_in_text = 399122;
 int chars_per_frame = 51240;
 
-char *text_store[] = { "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", "x06.sws", "x07.sws"};
+char *text_store[NUM_THREADS];
 char *frame_store[] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000003.bmp", "frame000000004.bmp", 
                                 "frame000000005.bmp", "frame000000006.bmp", "frame000000007.bmp", "frame000000008.bmp"};
 
@@ -53,11 +52,23 @@ Splits the given text file into multiple smaller text files for passing to encod
 */
 void split_text(char *text)
 {
-    printf ("Splitting source text into multiple text files.");
+    printf ("Splitting source text into multiple text files.\n");
     
-    //tested and works; note, the files may have different names depending on environment, have to test this in docker
-    char *instructions[] = {"split", text, "-n", "8", "-d", "--additional-suffix=.sws", NULL};     
-    execv(SPLIT_PATH, instructions);
+    FILE *fp;
+     
+    if( fp = fopen(text, "r") == NULL )
+       printf("Input file read failed.\n");
+    
+    for(int i = 0; i < NUM_THREADS; i++)
+      text_store[i] = malloc( sizeof(char) * chars_per_frame );
+
+    for(int j = 0; j < NUM_THREADS; j++)
+      for(int k = 0; k < chars_per_frame;k++)
+    {
+        text_store[j][k] = fgetc(fp);
+    }
+  
+    fclose(fp);
 }
 
 void join_text(char *output_text)
