@@ -14,7 +14,7 @@ Returns a file pointer to the opened file
 FILE *_open_file(const char *filename, const char *mode) {
     FILE *fp = fopen(filename, mode);
     if (fp == NULL) {
-        fprintf(stderr, "Could not open file %i", filename);
+        fprintf(stderr, "Could not open file %s", filename);
 
         exit(EXIT_FAILURE);
     }
