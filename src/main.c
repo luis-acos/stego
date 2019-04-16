@@ -97,7 +97,7 @@ void split_ffmpeg (char *video)
     printf("Parsing video into frames, this may take a while.\n");
     
     char *instructions[] = {"ffmpeg", "-i", video, "frame%09d.bmp", NULL };
-    execv(FFMPEG_PATH, instructions);
+    execvp(FFMPEG_PATH, instructions);
 }
 
 /*
@@ -124,7 +124,7 @@ void clean_up()
         //tested as working from shell  
         printf("Deleting temp image files from pwd.\n");
         char *instructions[] = {"rm", "frame*", NULL };  
-        execv(RM_PATH, instructions);
+        execvp(RM_PATH, instructions);
     }
     else
     {
@@ -134,7 +134,7 @@ void clean_up()
         //tested as working from shell 
         printf("Deleting temp text files from pwd.\n");
         char *instructions[] = {"rm", "x*", NULL };
-        execv(RM_PATH, instructions);
+        execvp(RM_PATH, instructions);
     }
 }
 
