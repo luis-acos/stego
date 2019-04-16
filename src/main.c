@@ -121,7 +121,7 @@ void clean_up()
     
     if (pid == 0)
     {
-      system("rm frame*);
+      system("rm frame*");
       /*
         //tested as working from shell  
         printf("Deleting temp image files from pwd.\n");
