@@ -123,7 +123,7 @@ void clean_up()
     {
         //tested as working from shell  
         printf("Deleting temp image files from pwd.\n");
-        char *instructions[] = {"rm", "-rf", "*.bmp", NULL };  
+        char *instructions[] = {"rm", "*.bmp", NULL };  
         execv(RM_PATH, instructions);
     }
     else
@@ -133,7 +133,7 @@ void clean_up()
       
         //tested as working from shell 
         printf("Deleting temp text files from pwd.\n");
-        char *instructions[] = {"rm", "-rf", "*.sws", NULL };
+        char *instructions[] = {"rm", "*.sws", NULL };
         execv(RM_PATH, instructions);
     }
 }
