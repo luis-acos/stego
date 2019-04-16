@@ -64,7 +64,7 @@ void split_text(char *text)
 void join_text(char *output_text)
 {
     printf ("Joining source text files into single output text file.");
-    
+  
     //test pending
     char *instructions[] = {"cat", "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", 
                             "x06.sws", "x07.sws", ">", output_text, NULL};     
