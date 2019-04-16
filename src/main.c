@@ -54,11 +54,25 @@ Splits the given text file into multiple char arrays for passing to encode/decod
 */
 void split_text(char *text)
 {
-    printf ("Splitting source text into multiple text files.");
-    
-    //tested and works; note, the files may have different names depending on environment, have to test this in docker
-    char *instructions[] = {"split", text, "-n", "8", "-d", "--additional-suffix=.sws", NULL};     
-    execvp(SPLIT_PATH, instructions);
+    FILE *text_files[NUM_THREADS];
+    FILE *source_file = fopen(argv[1], "r");
+
+    if (source_file == NULL)
+    {
+      printf("Problem with initial split text file read.");
+      exit(EXIT_FAILURE);
+    }
+
+    for(int i = 0; i < NUM_THREADS; i++)
+    {
+      text_files[i] = fopen(output_store[i], "w");
+
+      for(int j = 0; j < chars_per_frame; j++)
+          fputc ( fgetc(source_file), text_files[i] );
+
+      fclose ( text_files[i]);
+    }
+
 }
 
 void join_text(char *output_text)
