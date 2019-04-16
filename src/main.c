@@ -115,9 +115,12 @@ void join_ffmpeg (char *output_video)
 
 void clean_up() 
 {   
-      system("rm frame*");
+  system("rm frame*");
   
-      system("rm x*");
+  system("rm x*");
+  
+  for (int i = 0; i < NUM_THREADS; i++)
+          free(text_store[i]); 
 }
 
 void encode_decode (int mode, char **argv)
@@ -206,7 +209,7 @@ int main(int argc, char **argv) {
     
     split_text(argv[2]);
   
-    //encode_decode(mode, argv);  
+    encode_decode(mode, argv);  
   
     //delete the temp bmp files from directory
     clean_up();
