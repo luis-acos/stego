@@ -55,7 +55,7 @@ Splits the given text file into multiple char arrays for passing to encode/decod
 void split_text(char *text)
 {
     FILE *text_files[NUM_THREADS];
-    FILE *source_file = fopen(argv[1], "r");
+    FILE *source_file = fopen(text, "r");
 
     if (source_file == NULL)
     {
@@ -70,7 +70,7 @@ void split_text(char *text)
       for(int j = 0; j < chars_per_frame; j++)
           fputc ( fgetc(source_file), text_files[i] );
 
-      fclose ( text_files[i]);
+      fclose (text_files[i]);
     }
 
 }
