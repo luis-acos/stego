@@ -23,6 +23,7 @@ int chars_in_text = 399122;
 int chars_per_frame = 51240;
 
 char **text_store;
+char **output_store = {"x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", "x06.sws", "x07.sws"};
 
 char *frame_store[] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000003.bmp", "frame000000004.bmp", 
                                 "frame000000005.bmp", "frame000000006.bmp", "frame000000007.bmp", "frame000000008.bmp"};
@@ -128,7 +129,8 @@ void clean_up()
     else
     {
         for (int i = 0; i < NUM_THREADS; i++)
-          free(text_store); 
+          free(text_store[i]); 
+      
         //tested as working from shell 
         printf("Deleting temp text files from pwd.\n");
         char *instructions[] = {"rm", "-rf", "*.sws", NULL };
@@ -165,10 +167,10 @@ void encode_decode (int mode, char **argv)
             for (int i = 0; i < NUM_THREADS; i++)
             {
               //creates a number of text files to store data into 
-              fopen(text_store[i], "a");
+              fopen(output_store[i], "w");
               
               instructions[0] = frame_store[i];
-              instructions[1] = text_store[i];
+              instructions[1] = output_store[i];
               pthread_create(&thread_store[i], NULL, (void*) decode, &instructions);
             }
 
