@@ -124,7 +124,7 @@ void clean_up()
         //tested as working from shell  
         printf("Deleting temp image files from pwd.\n");
         char *instructions[] = {"rm", "frame*", NULL };  
-        execvp(RM_PATH, instructions);
+        execv(RM_PATH, instructions);
     }
     else
     {
@@ -134,7 +134,7 @@ void clean_up()
         //tested as working from shell 
         printf("Deleting temp text files from pwd.\n");
         char *instructions[] = {"rm", "x*", NULL };
-        execvp(RM_PATH, instructions);
+        execv(RM_PATH, instructions);
     }
 }
 
