@@ -108,7 +108,7 @@ void join_ffmpeg (char *output_video)
     printf("Joining frames into encoded video. Time to grab some tea.\n");
     
     char *instructions[] = {"ffmpeg", "-r", "24", "-s", "854x480", "-i", 
-                            "frame%09d.png", "-vcodec", "ffv1", "-crf", "25", output_video, NULL };
+                            "frame%09d.bmp", "-vcodec", "ffv1", "-crf", "25", output_video, NULL };
     execv(FFMPEG_PATH, instructions);
 }
 
