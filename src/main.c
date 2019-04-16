@@ -55,9 +55,12 @@ void split_text(char *text)
 {
     printf ("Splitting source text into multiple text files.\n");
     
-      
+    char* input_path = get_current_dir_name(); 
+    
+    strcat(input_path, "/");
+    strcat(input_path, text);
   
-    FILE * fp = fopen("input.txt", "r+");
+    FILE * fp = fopen(input_path, "r+");
      
     printf (fp);
   
