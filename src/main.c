@@ -55,7 +55,9 @@ void split_text(char *text)
 {
     printf ("Splitting source text into multiple text files.\n");
     
-    FILE * fp = fopen(text, "r+");
+      
+  
+    FILE * fp = fopen("input.txt", "r+");
      
     printf (fp);
   
