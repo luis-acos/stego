@@ -57,6 +57,8 @@ void split_text(char *text)
     
     FILE * fp = fopen(text, "r+");
      
+    printf (fp);
+  
     if(fp == NULL )
     {
       printf("Input file read failed.\n");
