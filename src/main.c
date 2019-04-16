@@ -12,6 +12,7 @@
 #define NUM_THREADS 8
 
 #define FFMPEG_PATH "/usr/bin/ffmpeg"
+#define SPLIT_PATH "usr/bin/split"
 #define CAT_PATH "/bin/cat"
 #define RM_PATH "/bin/rm"
 
@@ -22,7 +23,6 @@ int num_frames = 14315;
 int chars_in_text = 399122;
 int chars_per_frame = 51240;
 
-char **text_store;
 char *output_store[] = {"x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", "x06.sws", "x07.sws"};
 
 char *frame_store[] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000003.bmp", "frame000000004.bmp", 
@@ -54,29 +54,11 @@ Splits the given text file into multiple char arrays for passing to encode/decod
 */
 void split_text(char *text)
 {
-    printf ("Splitting source text into multiple text files.\n");
-  
-    FILE * fp = fopen("./input.txt", "w+");
+    printf ("Splitting source text into multiple text files.");
     
-    if (!fp)
-      perror("fopen");
-      
-    if(fp == NULL )
-    {
-      printf("Input text file read failed. File must be in present working directory to be read\n");
-      exit(1);
-    }
-           
-    text_store = (char**) malloc ( NUM_THREADS * sizeof(char *) );   
-  
-    for (int i = 0; i < NUM_THREADS; i++)
-      text_store[i] = malloc ( chars_per_frame * sizeof(char)  ); 
-    
-    for(int j = 0; j < NUM_THREADS; j++)
-      for(int k = 0; k < chars_per_frame;k++)
-        text_store[j][k] = fgetc(fp);
-  
-    fclose(fp);
+    //tested and works; note, the files may have different names depending on environment, have to test this in docker
+    char *instructions[] = {"split", text, "-n", "8", "-d", "--additional-suffix=.sws", NULL};     
+    execvp(SPLIT_PATH, instructions);
 }
 
 void join_text(char *output_text)
@@ -131,7 +113,7 @@ void encode_decode (int mode, char **argv)
             //spin off NUM_THREADS encode frames
             for(int i = 0; i < NUM_THREADS; i++)
             {
-              instructions[0] = text_store[i]; 
+              instructions[0] = output_store[i]; 
               instructions[1] = frame_store[i]; 
               instructions[2] = frame_store[i]; 
               pthread_create(&thread_store[i], NULL, (void*) encode, &instructions);
@@ -191,24 +173,22 @@ int main(int argc, char **argv) {
     //(requires parsing JSON or CSV file)
     //parse_video_info();  
   
-    int ffmpeg_status;
+    int ffmpeg_status, split_text_status;
   
     pid_t ffmpeg_pid = fork();
     
-    if(ffmpeg_pid < 0)
-    {
-        printf("Failure with ffmpeg execv call. Program exiting");
-        exit(1);
-    }
-    else if (ffmpeg_pid > 0)
-    {
-        wait(&ffmpeg_status);
-    } 
-    else
-      split_ffmpeg(argv[3]);
+    if (ffmpeg_pid == 0)
+        split_ffmpeg(argv[3]);
     
-    split_text(argv[2]);
+    waitpid(ffmpeg_pid, &ffmpeg_status, 0);
   
+    pid_t split_text_pid = fork();
+    
+    if (split_text_pid == 0)
+        split_text(argv[2]);
+  
+    waitpid(split_text_pid, &split_text_status, 0);
+ 
     encode_decode(mode, argv);  
   
     //delete the temp bmp files from directory
