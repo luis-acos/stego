@@ -55,6 +55,8 @@ Splits the given text file into multiple cahr arrays for passing to encode/decod
 void split_text(char *text)
 {
     printf ("Splitting source text into multiple text files.\n");
+    
+    strcat("./", text);
   
     FILE * fp = fopen(text, "w+");
     
