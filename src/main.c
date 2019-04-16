@@ -100,9 +100,6 @@ void clean_up()
   system("rm frame*");
   
   system("rm x*");
-  
-  for (int i = 0; i < NUM_THREADS; i++)
-          free(text_store[i]); 
 }
 
 void encode_decode (int mode, char **argv)
