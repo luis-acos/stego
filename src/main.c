@@ -15,7 +15,7 @@
 #define CAT_PATH "/bin/cat"
 #define RM_PATH "/bin/rm"
 
-pthread_t *thread_store[NUM_THREADS];
+pthread_t thread_store[NUM_THREADS];
 
 //hardcoded to default values pending change by parsing function
 int num_frames = 14315;
