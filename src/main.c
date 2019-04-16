@@ -54,15 +54,8 @@ Splits the given text file into multiple smaller text files for passing to encod
 void split_text(char *text)
 {
     printf ("Splitting source text into multiple text files.\n");
-    
-    char* input_path = get_current_dir_name(); 
-    
-    strcat(input_path, "/");
-    strcat(input_path, text);
   
-    FILE * fp = fopen(input_path, "r+");
-     
-    printf (fp);
+    FILE * fp = fopen(text, "r+");
   
     if(fp == NULL )
     {
