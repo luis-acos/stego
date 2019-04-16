@@ -50,7 +50,7 @@ Execv into ffprobe, produce info, then parse info into string array
 void parse_video_info(char *video) {}
 
 /*
-Splits the given text file into multiple cahr arrays for passing to encode/decode threads 
+Splits the given text file into multiple char arrays for passing to encode/decode threads 
 */
 void split_text(char *text)
 {
@@ -123,8 +123,8 @@ void clean_up()
     {
         //tested as working from shell  
         printf("Deleting temp image files from pwd.\n");
-        char *instructions[] = {"rm", "frame*", NULL };  
-        execvp("rm", instructions);
+        char *instructions[] = {"rm", "./frame*", NULL };  
+        execvp(RM_PATH, instructions);
     }
     else
     {
@@ -133,8 +133,8 @@ void clean_up()
       
         //tested as working from shell 
         printf("Deleting temp text files from pwd.\n");
-        char *instructions[] = {"rm", "x*", NULL };
-        execvp("rm", instructions);
+        char *instructions[] = {"rm", "./x*", NULL };
+        execvp(RM_PATH, instructions);
     }
 }
 
