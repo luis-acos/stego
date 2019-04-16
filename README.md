@@ -20,6 +20,8 @@ make
 ~~~~
 *** Image Steganography by LSB substitution ***
 
+cd bin
+
 Usage:  
 ./vsteg [-e] <text file to encode> <source video> <destination video>
 ./vsteg [-d] <encoded video> <decoded file>
