@@ -115,30 +115,9 @@ void join_ffmpeg (char *output_video)
 
 void clean_up() 
 {   
-    pid_t pid;
-    
-    pid = fork();
-    
-    if (pid == 0)
-    {
       system("rm frame*");
-      /*
-        //tested as working from shell  
-        printf("Deleting temp image files from pwd.\n");
-        char *instructions[] = {"rm", "./frame*", NULL };  
-        execvp(RM_PATH, instructions);
-      */
-    }
-    else
-    {
-        for (int i = 0; i < NUM_THREADS; i++)
-          free(text_store[i]); 
-      
-        //tested as working from shell 
-        printf("Deleting temp text files from pwd.\n");
-        char *instructions[] = {"rm", "./x*", NULL };
-        execvp(RM_PATH, instructions);
-    }
+  
+      system("rm x*");
 }
 
 void encode_decode (int mode, char **argv)
