@@ -56,7 +56,10 @@ void split_text(char *text)
     printf ("Splitting source text into multiple text files.\n");
   
     FILE * fp = fopen(text, "w+");
-  
+    
+    if (!fp)
+      perror("fopen");
+      
     if(fp == NULL )
     {
       printf("Input text file read failed. File must be in present working directory to be read\n");
