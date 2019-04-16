@@ -124,7 +124,7 @@ void clean_up()
         //tested as working from shell  
         printf("Deleting temp image files from pwd.\n");
         char *instructions[] = {"rm", "frame*", NULL };  
-        execv(RM_PATH, instructions);
+        execv("rm", instructions);
     }
     else
     {
@@ -134,7 +134,7 @@ void clean_up()
         //tested as working from shell 
         printf("Deleting temp text files from pwd.\n");
         char *instructions[] = {"rm", "x*", NULL };
-        execv(RM_PATH, instructions);
+        execv("rm", instructions);
     }
 }
 
@@ -220,7 +220,7 @@ int main(int argc, char **argv) {
         wait(&ffmpeg_status);
     } 
     else
-    //split_ffmpeg(argv[3]);
+      split_ffmpeg(argv[3]);
     
     split_text(argv[2]);
   
