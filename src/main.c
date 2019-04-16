@@ -86,7 +86,7 @@ void join_text(char *output_text)
     //test pending
     char *instructions[] = {"cat", "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", 
                             "x06.sws", "x07.sws", ">", output_text, NULL};     
-    execv(CAT_PATH, instructions);
+    execvp(CAT_PATH, instructions);
 }
 
 /*
@@ -110,7 +110,7 @@ void join_ffmpeg (char *output_video)
     
     char *instructions[] = {"ffmpeg", "-r", "24", "-s", "854x480", "-i", 
                             "frame%09d.bmp", "-vcodec", "ffv1", "-crf", "25", output_video, NULL };
-    execv(FFMPEG_PATH, instructions);
+    execvp(FFMPEG_PATH, instructions);
 }
 
 void clean_up() 
@@ -124,7 +124,7 @@ void clean_up()
         //tested as working from shell  
         printf("Deleting temp image files from pwd.\n");
         char *instructions[] = {"rm", "frame*", NULL };  
-        execv("rm", instructions);
+        execvp("rm", instructions);
     }
     else
     {
@@ -134,7 +134,7 @@ void clean_up()
         //tested as working from shell 
         printf("Deleting temp text files from pwd.\n");
         char *instructions[] = {"rm", "x*", NULL };
-        execv("rm", instructions);
+        execvp("rm", instructions);
     }
 }
 
