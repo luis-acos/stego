@@ -212,8 +212,7 @@ int main(int argc, char **argv) {
     }
     else if (ffmpeg_pid > 0)
     {
-      sleep(30);
-        //wait(&ffmpeg_status);
+        wait(&ffmpeg_status);
     } 
     else
       split_ffmpeg(argv[3]);
