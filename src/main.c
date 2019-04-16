@@ -49,7 +49,7 @@ Execv into ffprobe, produce info, then parse info into string array
 void parse_video_info(char *video) {}
 
 /*
-Splits the given text file into multiple smaller text files for passing to encode/decode strings 
+Splits the given text file into multiple cahr arrays for passing to encode/decode threads 
 */
 void split_text(char *text)
 {
