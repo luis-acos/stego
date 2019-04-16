@@ -149,7 +149,7 @@ void encode_decode (int mode, char **argv)
               instructions[0] = text_store[i]; 
               instructions[1] = frame_store[i]; 
               instructions[2] = frame_store[i]; 
-              pthread_create(&thread_store[i], NULL, (void*) encode, &instructions);
+              pthread_create(thread_store[i], NULL, (void*) encode, &instructions);
             }
       
             //join threads
@@ -171,7 +171,7 @@ void encode_decode (int mode, char **argv)
               
               instructions[0] = frame_store[i];
               instructions[1] = output_store[i];
-              pthread_create(&thread_store[i], NULL, (void*) decode, &instructions);
+              pthread_create(thread_store[i], NULL, (void*) decode, &instructions);
             }
 
             //join threads
