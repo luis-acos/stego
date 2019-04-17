@@ -80,14 +80,14 @@ void join_text(char *output_text)
 {
     int text_status;
   
-    pid_t text_status = fork();
+    pid_t text_pid = fork();
   
-    if(text_status < 0)
+    if(text_pid < 0)
     {
         printf("Failure with ffmpeg execv call. Program exiting");
         exit(1);
     }
-    else if (text_status > 0)
+    else if (text_pid > 0)
     {
         wait(&text_status);
     } 
