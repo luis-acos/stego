@@ -70,36 +70,30 @@ void split_text(char *text)
       text_files[i] = fopen(output_store[i], "w");
 
       for(int j = 0; j < chars_per_frame; j++)
-          fputc ( fgetc(source_file), text_files[i] );
+          fputc ( fgetc(source_file), text_files[i]++ );
 
       fclose (text_files[i]);
     }
+    fclose(source_file);
 }
 
 void join_text(char *output_text)
 {
-    int text_status;
+    printf("Splitting source text into multiple files.\n");
   
-    pid_t text_pid = fork();
-  
-    if(text_pid < 0)
+    FILE *text_files[NUM_THREADS];
+    FILE *source_file = fopen(output_text, "w");
+    
+    for(int i = 0; i < NUM_THREADS; i++)
     {
-        printf("Failure with ffmpeg execv call. Program exiting");
-        exit(1);
-    }
-    else if (text_pid > 0)
-    {
-        wait(&text_status);
-    } 
-    else
-    {
-      printf ("Joining source text files into single output text file.");
-  
-      //test pending
-      char *instructions[] = {"cat", "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", 
-                            "x06.sws", "x07.sws", ">", output_text, NULL};     
-      execvp(CAT_PATH, instructions);
-    }
+      text_file[i] = fopen(output_store[i], "r")
+        
+      for(int j = 0; j < chars_per_frame; j++)
+        fputc( fgetc(text_file[i]), source_file++)
+              
+      fclose(text_file[i]);
+    }              
+    fclose(source_file);            
 }
 
 /*
