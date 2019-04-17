@@ -216,8 +216,6 @@ void encode_decode (int mode, char **argv)
             for (int i = 0; i < NUM_THREADS; i++)
             {
               //creates a number of text files to store data into then closes them
-              FILE *work_file = fopen(output_store[i], "w");
-              fclose(work_file);
               
               thr_data[i].image_source = frame_store[i];
               thr_data[i].text_destination = output_store[i];
