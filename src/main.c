@@ -30,6 +30,16 @@ char *frame_store[] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000
 
 int frames_to_encode = NUM_THREADS; 
 
+typedef struct _thread_data_t{
+  
+  char *text_source;
+  char *original_image;
+  char *destination_image;
+  char *image_source;
+  char *text_destination;
+  
+} thread_data_t;
+
 /*
 Provides an explanation of command line arguments 
 */
@@ -122,14 +132,14 @@ void clean_up()
 void encode_decode (int mode, char **argv)
 {  
     if(mode){        
-        char *instructions[3];
+        thread_data_t thr_data[NUM_THREADS];
         
             //spin off NUM_THREADS encode frames
             for(int i = 0; i < NUM_THREADS; i++)
             {
-              instructions[0] = output_store[i]; 
-              instructions[1] = frame_store[i]; 
-              instructions[2] = frame_store[i]; 
+              thr_data[i].text_source = output_store[i]; 
+              thr_data[i].original_image = frame_store[i]; 
+              thr_data[i].destination_image = frame_store[i]; 
               pthread_create(&thread_store[i], NULL, (void*) encode, &instructions);
             }
       
@@ -142,17 +152,18 @@ void encode_decode (int mode, char **argv)
         join_ffmpeg(argv[4]);
         
     } else {       
-        char *instructions[2];
+        thread_data_t thr_data[NUM_THREADS];
       
             //spin off NUM_THREADS decode frames
             for (int i = 0; i < NUM_THREADS; i++)
             {
-              //creates a number of text files to store data into 
-              fopen(output_store[i], "w");
+              //creates a number of text files to store data into then closes them
+              FILE *work_file = fopen(output_store[i], "w");
+              fclose(work_file);
               
-              instructions[0] = frame_store[i];
-              instructions[1] = output_store[i];
-              pthread_create(&thread_store[i], NULL, (void*) decode, &instructions);
+              thr_data[i].image_source = frame_store[i];
+              the_data[i].text_destination = output_store[i];
+              pthread_create(&thread_store[i], NULL, (void*) decode, &thr_data[i]);
             }
 
             //join threads
