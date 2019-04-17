@@ -20,6 +20,6 @@ typedef struct _thread_data_t{
 void _store_length(long size, unsigned char *data);
 long _get_length(const unsigned char *data);
 void *encode(void* arg);
-void *decode(coid* arg);
+void *decode(void* arg);
 
 #endif //STEGO_H
