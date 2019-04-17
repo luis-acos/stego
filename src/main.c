@@ -183,7 +183,7 @@ int main(int argc, char **argv) {
     //(requires parsing JSON or CSV file)
     //parse_video_info();  
   
-    int ffmpeg_status, split_text_status;
+    int ffmpeg_status;
   
     pid_t ffmpeg_pid = fork();
     
@@ -192,12 +192,7 @@ int main(int argc, char **argv) {
     
     waitpid(ffmpeg_pid, &ffmpeg_status, 0);
   
-    pid_t split_text_pid = fork();
-    
-    if (split_text_pid == 0)
-        split_text(argv[2]);
-  
-    waitpid(split_text_pid, &split_text_status, 0);
+    split_text(argv[2]);
  
     //encode_decode(mode, argv);  
   
