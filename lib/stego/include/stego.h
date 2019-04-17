@@ -9,7 +9,7 @@
 
 void _store_length(long size, unsigned char *data);
 long _get_length(const unsigned char *data);
-bool encode(char *text_source, char *original_image, char *destination_image);
-bool decode(char *image_source, char *text_destination);
+void *encode(void* arg);
+void *decode(coid* arg);
 
 #endif //STEGO_H
