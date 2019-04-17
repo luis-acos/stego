@@ -54,6 +54,8 @@ Splits the given text file into multiple char arrays for passing to encode/decod
 */
 void split_text(char *text)
 {
+    printf("Splitting source text into multiple files.\n");
+  
     FILE *text_files[NUM_THREADS];
     FILE *source_file = fopen(text, "r");
 
@@ -110,8 +112,10 @@ void join_ffmpeg (char *output_video)
 
 void clean_up() 
 {   
+  printf("Deleting working frames from pwd.\n");
   system("rm frame*");
   
+  printf("Deleting temporary text files from pwd.\n");
   system("rm x*");
 }
 
