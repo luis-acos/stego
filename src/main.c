@@ -185,12 +185,17 @@ int main(int argc, char **argv) {
   
     int ffmpeg_status;
   
-    pid_t ffmpeg_pid = fork();
-    
-    if (ffmpeg_pid == 0)
-        split_ffmpeg(argv[3]);
-    
-    waitpid(ffmpeg_pid, &ffmpeg_status, 0);
+    if(ffmpeg_pid < 0)
+    {
+        printf("Failure with ffmpeg execv call. Program exiting");
+        exit(1);
+    }
+    else if (ffmpeg_pid > 0)
+    {
+        wait(&ffmpeg_status);
+    } 
+    else
+      split_ffmpeg(argv[3]);
   
     split_text(argv[2]);
  
