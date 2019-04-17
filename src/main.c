@@ -72,7 +72,6 @@ void split_text(char *text)
 
       fclose (text_files[i]);
     }
-
 }
 
 void join_text(char *output_text)
@@ -200,7 +199,7 @@ int main(int argc, char **argv) {
   
     waitpid(split_text_pid, &split_text_status, 0);
  
-    encode_decode(mode, argv);  
+    //encode_decode(mode, argv);  
   
     //delete the temp bmp files from directory
     clean_up();
