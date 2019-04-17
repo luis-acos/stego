@@ -206,10 +206,10 @@ int main(int argc, char **argv) {
   
     split_text(argv[2]);
  
-    //encode_decode(mode, argv);  
+    encode_decode(mode, argv);  
   
     //delete the temp bmp files from directory
-    //clean_up();
+    clean_up();
     
     return EXIT_SUCCESS;
 }
