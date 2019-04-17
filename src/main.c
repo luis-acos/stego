@@ -67,12 +67,19 @@ void split_text(char *text)
 
     for(int i = 0; i < NUM_THREADS; i++)
     {
+	 
       text_files[i] = fopen(output_store[i], "w");
 
+      char *text_store = malloc ( chars_per_frame * sizeof(char) );
+
       for(int j = 0; j < chars_per_frame; j++)
-          fputc ( fgetc(source_file), text_files[i]++ );
+      	text_store[j] = fgetc(source_file);
+
+	
+      fprintf(text_files[i], text_store);
 
       fclose (text_files[i]);
+      free(text_store);	
     }
     fclose(source_file);
 }
@@ -83,17 +90,27 @@ void join_text(char *output_text)
   
     FILE *text_files[NUM_THREADS];
     FILE *source_file = fopen(output_text, "w");
-    
+
+    if (source_file == NULL)
+    {
+      printf("Problem with initial split text file read.");
+      exit(EXIT_FAILURE);
+    }
+
+    char *text_store = malloc ( chars_per_frame * NUM_THREADS * sizeof(char) );
+  
     for(int i = 0; i < NUM_THREADS; i++)
     {
-      text_file[i] = fopen(output_store[i], "r")
-        
+      text_files[i] = fopen(output_store[i], "r");
+
       for(int j = 0; j < chars_per_frame; j++)
-        fputc( fgetc(text_file[i]), source_file++)
-              
-      fclose(text_file[i]);
-    }              
-    fclose(source_file);            
+      	text_store[j + (chars_per_frame * i)] = fgetc(source_file);
+
+      fclose (text_files[i]);   
+    }
+    fprintf(source_file, text_store);
+    free(text_store);	
+    fclose(source_file);           
 }
 
 /*
