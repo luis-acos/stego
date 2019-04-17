@@ -35,9 +35,15 @@ to the 8 bits in the char of the source text.
 Iterates to the next char in the source text until EOF of source file is reached, then writes the image bitmap 
 into the destination image 
 */
-bool encode(char *text_source, char *original_image, char *destination_image) {
+void *encode(void* arg) {
     //TODO: add size of text source to encoded image
     
+    thread_data_t *input = (thread_data_t *) arg;
+    
+    char *text_source = input->text_source;
+    char *original_image = input->original_image;
+    char *destination_image = input->destination_image;
+        
     //unsure error_message use?
     char *error_message = NULL;
     char buff;
@@ -72,7 +78,13 @@ Populates the image source into a bitmap struct
 Shaves off the last bit in 8 bytes of the image file and populates a char with the bits it shaves off;
 continues into for message length until done
 */
-bool decode(char *image_source, char *text_destination) {
+void *decode(void* arg) {
+    
+    thread_data_t *input = (thread_data_t *) arg;
+    
+    char *image_source = input->image_source;
+    char *text_destination = input->text_destination;
+    
     char *error_message = NULL;
     unsigned char buff = 0;
     unsigned char mask = 1;
