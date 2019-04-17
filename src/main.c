@@ -182,6 +182,8 @@ void encode_decode (int mode, char **argv)
 {  
     if(mode){        
         
+	split_text(argv[2]);    
+	    
         split_ffmpeg(argv[3]);
       
         thread_data_t thr_data[NUM_THREADS];
@@ -253,8 +255,6 @@ int main(int argc, char **argv) {
     //TO DO POSSIBLE use ffprobe to populate file data and control variables (size of txt each BMP can store, etc) 
     //(requires parsing JSON or CSV file)
     //parse_video_info();  
- 
-    split_text(argv[2]);
  
     encode_decode(mode, argv);  
   
