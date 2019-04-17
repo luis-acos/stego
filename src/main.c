@@ -30,16 +30,6 @@ char *frame_store[] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000
 
 int frames_to_encode = NUM_THREADS; 
 
-typedef struct _thread_data_t{
-  
-  char *text_source;
-  char *original_image;
-  char *destination_image;
-  char *image_source;
-  char *text_destination;
-  
-} thread_data_t;
-
 /*
 Provides an explanation of command line arguments 
 */
@@ -140,7 +130,7 @@ void encode_decode (int mode, char **argv)
               thr_data[i].text_source = output_store[i]; 
               thr_data[i].original_image = frame_store[i]; 
               thr_data[i].destination_image = frame_store[i]; 
-              pthread_create(&thread_store[i], NULL, (void*) encode, &instructions);
+              pthread_create(&thread_store[i], NULL, (void*) encode, &thr_data[i]);
             }
       
             //join threads
@@ -162,7 +152,7 @@ void encode_decode (int mode, char **argv)
               fclose(work_file);
               
               thr_data[i].image_source = frame_store[i];
-              the_data[i].text_destination = output_store[i];
+              thr_data[i].text_destination = output_store[i];
               pthread_create(&thread_store[i], NULL, (void*) decode, &thr_data[i]);
             }
 
