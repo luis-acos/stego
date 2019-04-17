@@ -69,7 +69,7 @@ void *encode(void* arg) {
     //writes (bitmap) image to destination image 
     write_bitmap(destination_image, image, &error_message);
     bool is_valid = check_bitmap_header(image->header, "sw_poster_copy.bmp");
-    return is_valid;
+    return (void*) is_valid;
 }
 
 /*
@@ -101,7 +101,7 @@ void *decode(void* arg) {
     }
 
     bool is_valid = true;
-    return is_valid;
+    return (void*) is_valid;
 }
 
 //TODO: decode //Looks like decode is complete?
