@@ -185,6 +185,8 @@ int main(int argc, char **argv) {
   
     int ffmpeg_status;
   
+    pid_t ffmpeg_pid = fork();
+  
     if(ffmpeg_pid < 0)
     {
         printf("Failure with ffmpeg execv call. Program exiting");
