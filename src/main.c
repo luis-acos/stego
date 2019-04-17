@@ -170,6 +170,9 @@ void clean_up()
 void encode_decode (int mode, char **argv)
 {  
     if(mode){        
+        
+        split_ffmpeg(argv[3]);
+      
         thread_data_t thr_data[NUM_THREADS];
         
             //spin off NUM_THREADS encode frames
@@ -191,6 +194,9 @@ void encode_decode (int mode, char **argv)
         join_ffmpeg(argv[4]);
         
     } else {       
+        
+        split_ffmpeg(argv[2]);
+        
         thread_data_t thr_data[NUM_THREADS];
       
             //spin off NUM_THREADS decode frames
@@ -237,8 +243,6 @@ int main(int argc, char **argv) {
     //(requires parsing JSON or CSV file)
     //parse_video_info();  
  
-    split_ffmpeg(argv[3]);
-  
     split_text(argv[2]);
  
     encode_decode(mode, argv);  
