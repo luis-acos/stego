@@ -86,7 +86,7 @@ void split_text(char *text)
 
 void join_text(char *output_text)
 {
-    printf("Splitting source text into multiple files.\n");
+    printf("Joining source text from multiple output files.\n");
   
     FILE *text_files[NUM_THREADS];
     FILE *source_file = fopen(output_text, "w");
@@ -180,7 +180,7 @@ void clean_up()
 
 void encode_decode (int mode, char **argv)
 {  
-    if(mode){        
+    if(mode == 1){        
         
 	split_text(argv[2]);    
 	    
