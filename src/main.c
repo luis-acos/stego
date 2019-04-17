@@ -78,12 +78,28 @@ void split_text(char *text)
 
 void join_text(char *output_text)
 {
-    printf ("Joining source text files into single output text file.");
+    int text_status;
   
-    //test pending
-    char *instructions[] = {"cat", "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", 
+    pid_t text_status = fork();
+  
+    if(text_status < 0)
+    {
+        printf("Failure with ffmpeg execv call. Program exiting");
+        exit(1);
+    }
+    else if (text_status > 0)
+    {
+        wait(&text_status);
+    } 
+    else
+    {
+      printf ("Joining source text files into single output text file.");
+  
+      //test pending
+      char *instructions[] = {"cat", "x00.sws", "x01.sws", "x02.sws", "x03.sws", "x04.sws", "x05.sws", 
                             "x06.sws", "x07.sws", ">", output_text, NULL};     
-    execvp(CAT_PATH, instructions);
+      execvp(CAT_PATH, instructions);
+    }
 }
 
 /*
@@ -91,10 +107,26 @@ Splits the video file into bmp files
 */
 void split_ffmpeg (char *video)   
 {
-    printf("Parsing video into frames, this may take a while.\n");
+    int ffmpeg_status;
+  
+    pid_t ffmpeg_pid = fork();
+  
+    if(ffmpeg_pid < 0)
+    {
+        printf("Failure with ffmpeg execv call. Program exiting");
+        exit(1);
+    }
+    else if (ffmpeg_pid > 0)
+    {
+        wait(&ffmpeg_status);
+    } 
+    else
+    {
+      printf("Parsing video into frames, this may take a while.\n");
     
-    char *instructions[] = {"ffmpeg", "-i", video, "frame%09d.bmp", NULL };
-    execvp(FFMPEG_PATH, instructions);
+      char *instructions[] = {"ffmpeg", "-i", video, "frame%09d.bmp", NULL };
+      execvp(FFMPEG_PATH, instructions);
+    }
 }
 
 /*
@@ -103,11 +135,27 @@ TO DO allow for custom inputs / modify fps, resolution, pixel format?
 */
 void join_ffmpeg (char *output_video)   
 {
-    printf("Joining frames into encoded video. Time to grab some tea.\n");
+    int ffmpeg_status;
+  
+    pid_t ffmpeg_pid = fork();
+  
+    if(ffmpeg_pid < 0)
+    {
+        printf("Failure with ffmpeg execv call. Program exiting");
+        exit(1);
+    }
+    else if (ffmpeg_pid > 0)
+    {
+        wait(&ffmpeg_status);
+    } 
+    else
+    {
+      printf("Joining frames into encoded video. Time to grab some tea.\n");
     
-    char *instructions[] = {"ffmpeg", "-r", "24", "-s", "854x480", "-i", 
+      char *instructions[] = {"ffmpeg", "-r", "24", "-s", "854x480", "-i", 
                             "frame%09d.bmp", "-vcodec", "ffv1", "-crf", "25", output_video, NULL };
-    execvp(FFMPEG_PATH, instructions);
+      execvp(FFMPEG_PATH, instructions);
+    }
 }
 
 void clean_up() 
@@ -139,6 +187,7 @@ void encode_decode (int mode, char **argv)
         
         //TO DO fork then exec ffmpeg to join files back into a single ouput video (ensure same size and frame rate as source, use lossless codec)
         //put ffmpeg arguments here, theyre pretty long and detailed    
+        
         join_ffmpeg(argv[4]);
         
     } else {       
@@ -187,22 +236,8 @@ int main(int argc, char **argv) {
     //TO DO POSSIBLE use ffprobe to populate file data and control variables (size of txt each BMP can store, etc) 
     //(requires parsing JSON or CSV file)
     //parse_video_info();  
-  
-    int ffmpeg_status;
-  
-    pid_t ffmpeg_pid = fork();
-  
-    if(ffmpeg_pid < 0)
-    {
-        printf("Failure with ffmpeg execv call. Program exiting");
-        exit(1);
-    }
-    else if (ffmpeg_pid > 0)
-    {
-        wait(&ffmpeg_status);
-    } 
-    else
-      split_ffmpeg(argv[3]);
+ 
+    split_ffmpeg(argv[3]);
   
     split_text(argv[2]);
  
