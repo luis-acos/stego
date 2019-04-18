@@ -9,7 +9,7 @@
 #include <string.h>
 #include <sys/wait.h>
 
-#define NUM_THREADS 8
+#define NUM_THREADS 16
 
 #define FFMPEG_PATH "/usr/bin/ffmpeg"
 #define CAT_PATH "/bin/cat"
@@ -20,7 +20,7 @@ pthread_t thread_store[NUM_THREADS];
 //hardcoded to default values pending change by parsing function
 int num_frames = 14315;
 int chars_in_text = 399122;
-int chars_per_frame = 49890;
+int chars_per_frame = 25000;
 
 char *output_store[] = {"x00.txt", "x01.txt", "x02.txt", "x03.txt", "x04.txt", "x05.txt", "x06.txt", "x07.txt",
 		        "x08.txt", "x09.txt", "x10.txt", "x11.txt", "x12.txt", "x13.txt", "x14.txt", "x15.txt"};
