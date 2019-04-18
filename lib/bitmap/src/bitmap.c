@@ -31,7 +31,7 @@ Bitmap *read_bitmap(char *filename, char **error) {
     //TODO: check that memory was allocated properly
 
     //Read bitmap image data
-    num_read = (int) fread(image->data, image->header.image_size_bytes + 54, 1, file);
+    num_read = (int) fread(image->data, image->header.image_size_bytes, 1, file);
     //TODO: check that bitmap image data was read properly
 
     return image;
@@ -52,7 +52,7 @@ bool write_bitmap(const char *filename, Bitmap *image, char **error) {
     // TODO: check that header was written properly
 
     // write the bitmap image data
-    num_read = (int) fwrite(image->data, image->header.image_size_bytes, 1, file);
+    num_read = (int) fwrite(image->data + 54, image->header.image_size_bytes, 1, file);
     //TODO: check that image data was written properly
 
     return true;
