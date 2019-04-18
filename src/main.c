@@ -27,9 +27,9 @@ char *output_store[] = {"x00.txt", "x01.txt", "x02.txt", "x03.txt", "x04.txt", "
 		       "x08.txt", "x09.txt", "x10.txt", "x11.txt", "x12.txt", "x13.txt", "x14.txt", "x15.txt"};
 
 char *frame_store[] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000003.bmp", "frame000000004.bmp", 
-                                "frame000000005.bmp", "frame000000006.bmp", "frame000000007.bmp", "frame000000008.bmp"
-		      "frame000000009.bmp", "frame000000010.bmp", "frame000000011.bmp", "frame000000012.bmp", 
-                                "frame000000013.bmp", "frame000000014.bmp", "frame000000015.bmp", "frame000000016.bmp"};
+                        "frame000000005.bmp", "frame000000006.bmp", "frame000000007.bmp", "frame000000008.bmp",
+		        "frame000000009.bmp", "frame000000010.bmp", "frame000000011.bmp", "frame000000012.bmp", 
+                        "frame000000013.bmp", "frame000000014.bmp", "frame000000015.bmp", "frame000000016.bmp"};
 
 int frames_to_encode = NUM_THREADS; 
 
