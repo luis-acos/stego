@@ -9,18 +9,16 @@ Usage Notes
 ## To Compile
 
 ~~~~
-mkdir build
-cd build
+//while in build directory 
 cmake ..
 make
+cd bin
 ~~~~
 
 ## Usage
 
 ~~~~
 *** Image Steganography by LSB substitution ***
-
-cd bin
 
 Usage:  
 ./vsteg [-e] <text file to encode> <source video> <destination video>
