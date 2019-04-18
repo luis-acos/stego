@@ -24,7 +24,7 @@ int chars_in_text = 399122;
 int chars_per_frame = 25000;
 
 char *output_store[] = {"x00.txt", "x01.txt", "x02.txt", "x03.txt", "x04.txt", "x05.txt", "x06.txt", "x07.txt",
-		       "x08.txt", "x09.txt", "x10.txt", "x11.txt", "x12.txt", "x13.txt", "x14.txt", "x15.txt"};
+		        "x08.txt", "x09.txt", "x10.txt", "x11.txt", "x12.txt", "x13.txt", "x14.txt", "x15.txt"};
 
 char *frame_store[] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000003.bmp", "frame000000004.bmp", 
                         "frame000000005.bmp", "frame000000006.bmp", "frame000000007.bmp", "frame000000008.bmp",
