@@ -138,7 +138,7 @@ void split_ffmpeg (char *video)
     {
       printf("Parsing video into frames, this may take a while.\n");
     
-      char *instructions[] = {"ffmpeg", "-i", video, "-v:c", "libx264", "frame%09d.bmp", NULL };
+      char *instructions[] = {"ffmpeg", "-i", video, "-vcodec", "libx264", "frame%09d.bmp", NULL };
       execvp(FFMPEG_PATH, instructions);
     }
 }
