@@ -52,7 +52,7 @@ bool write_bitmap(const char *filename, Bitmap *image, char **error) {
     // TODO: check that header was written properly
 
     // write the bitmap image data
-    num_read = (int) fwrite(image->data + 54, image->header.image_size_bytes, 1, file);
+    num_read = (int) fwrite(image->data, image->header.image_size_bytes, 25000 * 8, file);
     //TODO: check that image data was written properly
 
     return true;
