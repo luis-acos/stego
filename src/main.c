@@ -257,7 +257,7 @@ int main(int argc, char **argv) {
     encode_decode(mode, argv);  
   
     //delete the temp bmp files from directory
-    //clean_up();
+    clean_up();
     
     return EXIT_SUCCESS;
 }
