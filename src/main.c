@@ -138,7 +138,7 @@ void split_ffmpeg (char *video)
     {
       printf("Parsing video into frames, this may take a while.\n");
     
-      char *instructions[] = {"ffmpeg", "-i", video, "frame%09d.bmp", NULL };
+      char *instructions[] = {"ffmpeg", "-i", video, "-v:c", "libx264", "frame%09d.bmp", NULL };
       execvp(FFMPEG_PATH, instructions);
     }
 }
@@ -166,7 +166,7 @@ void join_ffmpeg (char *output_video)
     {
       printf("Joining frames into encoded video. Time to grab some tea.\n");
     
-      char *instructions[] = {"ffmpeg", "-r", "24", "-s", "854x480", "-i", "frame%09d.bmp", "-vcodec", "mpeg4", "-crf", "0", output_video, NULL };
+      char *instructions[] = {"ffmpeg", "-r", "24", "-s", "854x480", "-i", "frame%09d.bmp", "-vcodec", "libx264", "-crf", "0", output_video, NULL };
       execvp(FFMPEG_PATH, instructions);
     }
 }
