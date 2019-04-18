@@ -12,7 +12,6 @@
 #define NUM_THREADS 8
 
 #define FFMPEG_PATH "/usr/bin/ffmpeg"
-#define SPLIT_PATH "usr/bin/split"
 #define CAT_PATH "/bin/cat"
 #define RM_PATH "/bin/rm"
 
@@ -30,8 +29,6 @@ char *frame_store[] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000
                         "frame000000005.bmp", "frame000000006.bmp", "frame000000007.bmp", "frame000000008.bmp",
 		        "frame000000009.bmp", "frame000000010.bmp", "frame000000011.bmp", "frame000000012.bmp", 
                         "frame000000013.bmp", "frame000000014.bmp", "frame000000015.bmp", "frame000000016.bmp"};
-
-int frames_to_encode = NUM_THREADS; 
 
 /*
 Provides an explanation of command line arguments 
