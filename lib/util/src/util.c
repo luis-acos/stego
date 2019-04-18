@@ -63,5 +63,5 @@ long _get_text_length(FILE *filename) {
     fseek(filename, 0L, SEEK_END);
     long size = ftell(filename) + 1;
     fseek(filename, 0L, SEEK_SET);
-    return (size);
+    return (size+54);
 }
