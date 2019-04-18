@@ -58,14 +58,13 @@ void *encode(void* arg) {
     
     //conducts some bitwise shift operations to separate single char from text into 8 bits 
     //and spread it between 8 bytes in the image file, depositing it in the last bit of each image byte  
-    for(int j = 0; j < 25000; j++) {
+    do {
         buff = (char) fgetc(text_file);
         for (int i = 0; i < 8; i++) {
             image->data[index] = (image->data[index] & ~mask) | (_get_bit(buff, i) & mask);
             index++;
         }
-    } 
-    //while (!feof(text_file));
+    } while (!feof(text_file));
 
     //writes (bitmap) image to destination image 
     write_bitmap(destination_image, image, &error_message);
