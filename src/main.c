@@ -9,7 +9,7 @@
 #include <string.h>
 #include <sys/wait.h>
 
-#define NUM_THREADS 8
+#define NUM_THREADS 12
 
 #define FFMPEG_PATH "/usr/bin/ffmpeg"
 #define SPLIT_PATH "usr/bin/split"
