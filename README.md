@@ -12,7 +12,6 @@ Usage Notes
 //while in build directory 
 cmake ..
 make
-cd bin
 ~~~~
 
 ## Usage
@@ -20,6 +19,7 @@ cd bin
 ~~~~
 *** Image Steganography by LSB substitution ***
 
+//while in build/bin directory
 Usage:  
 ./vsteg [-e] <text file to encode> <source video> <destination video>
 ./vsteg [-d] <encoded video> <decoded file>
