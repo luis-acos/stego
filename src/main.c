@@ -9,7 +9,7 @@
 #include <string.h>
 #include <sys/wait.h>
 
-#define NUM_THREADS 12
+#define NUM_THREADS 16
 
 #define FFMPEG_PATH "/usr/bin/ffmpeg"
 #define SPLIT_PATH "usr/bin/split"
@@ -23,10 +23,13 @@ int num_frames = 14315;
 int chars_in_text = 399122;
 int chars_per_frame = 51240;
 
-char *output_store[] = {"x00.txt", "x01.txt", "x02.txt", "x03.txt", "x04.txt", "x05.txt", "x06.txt", "x07.txt"};
+char *output_store[] = {"x00.txt", "x01.txt", "x02.txt", "x03.txt", "x04.txt", "x05.txt", "x06.txt", "x07.txt",
+		       "x08.txt", "x09.txt", "x10.txt", "x11.txt", "x12.txt", "x13.txt", "x14.txt", "x15.txt"};
 
 char *frame_store[] = { "frame000000001.bmp", "frame000000002.bmp", "frame000000003.bmp", "frame000000004.bmp", 
-                                "frame000000005.bmp", "frame000000006.bmp", "frame000000007.bmp", "frame000000008.bmp"};
+                                "frame000000005.bmp", "frame000000006.bmp", "frame000000007.bmp", "frame000000008.bmp"
+		      "frame000000009.bmp", "frame000000010.bmp", "frame000000011.bmp", "frame000000012.bmp", 
+                                "frame000000013.bmp", "frame000000014.bmp", "frame000000015.bmp", "frame000000016.bmp"};
 
 int frames_to_encode = NUM_THREADS; 
 
