@@ -91,7 +91,7 @@ void *decode(void* arg) {
     long message_length;
     Bitmap *image = read_bitmap(image_source, &error_message);
     FILE *text_file = _open_file(text_destination, "w");
-    message_length = _get_length(image->data);
+    message_length = 1228746;
     for (int index = 4; index < message_length * 8; index++) {
         buff = buff | ((image->data[index] & mask) << ((index - 4) % 8));
         if (((index - 4) % 8) > 6) {
