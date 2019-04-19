@@ -88,11 +88,11 @@ void *decode(void* arg) {
     char *error_message = NULL;
     unsigned char buff = 0;
     unsigned char mask = 1;
-    long message_length;
+    long message_length = 25000;
     Bitmap *image = read_bitmap(image_source, &error_message);
     FILE *text_file = _open_file(text_destination, "w");
-    message_length = _get_length(image->data);
-    for (int index = 4; index < image->header.image_size_bytes; index++) {
+    //message_length = _get_length(image->data);
+    for (int index = 4; index < image->message_length * 8; index++) {
         buff = buff | ((image->data[index] & mask) << ((index - 4) % 8));
         if (((index - 4) % 8) > 6) {
             fputc(buff, text_file);
