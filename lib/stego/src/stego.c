@@ -59,6 +59,8 @@ void *encode(void* arg) {
     //conducts some bitwise shift operations to separate single char from text into 8 bits 
     //and spread it between 8 bytes in the image file, depositing it in the last bit of each image byte  
     do {
+        if(feof(text_file))
+           break;
         buff = (char) fgetc(text_file);
         for (int i = 0; i < 8; i++) {
             image->data[index] = (image->data[index] & ~mask) | (_get_bit(buff, i) & mask);
