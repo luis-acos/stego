@@ -227,7 +227,7 @@ void encode_decode (int mode, char **argv)
 
         //TO DO should output a single text file, figure out how to join multiple txt files 
         //(mutex that doesnt ruin parrallelization?)
-        join_text(argv[2]);
+        join_text(argv[3]);
     }
 }
 
@@ -256,7 +256,7 @@ int main(int argc, char **argv) {
     encode_decode(mode, argv);  
   
     //delete the temp bmp files from directory
-    clean_up();
+    //clean_up();
     
     return EXIT_SUCCESS;
 }
