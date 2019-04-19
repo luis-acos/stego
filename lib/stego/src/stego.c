@@ -88,7 +88,7 @@ void *decode(void* arg) {
     char *error_message = NULL;
     unsigned char buff = 0;
     unsigned char mask = 1;
-    long message_length = 25002;
+    long message_length = 25001;
     Bitmap *image = read_bitmap(image_source, &error_message);
     FILE *text_file = _open_file(text_destination, "w");
     //message_length = _get_length(image->data);
