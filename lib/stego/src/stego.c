@@ -64,7 +64,7 @@ void *encode(void* arg) {
             image->data[index] = (image->data[index] & ~mask) | (_get_bit(buff, i) & mask);
             index++;
         }
-    } while (!feof(text_file));
+    } while (!feof(text_file) && index < image->header.image_size_bytes && !feof(text_file));
 
     //writes (bitmap) image to destination image 
     write_bitmap(destination_image, image, &error_message);
